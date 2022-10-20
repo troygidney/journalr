@@ -1,10 +1,14 @@
+body {
+    font-family: 'Raleway', sans-serif;
+}
+
 .wrapper {
      display: inline-flex; 
      width: 100vw;
      max-height: calc(100vw);
      height: calc(100vh);
      flex-direction: row;
-
+    overflow: hidden;
 }
 
 /* ::-webkit-scrollbar {
@@ -18,16 +22,30 @@
     width: inherit;
     position: fixed;
     min-height: 4rem;
-
+    max-height: 4rem;
+    z-index: 1;
 }
 
 .sideBar {
-     background-color: whitesmoke;
-     flex: 1 0 15%;
+     background-color: #494F55;
+     /* flex: 1 0 15%; */
      padding-top: 4rem;
      max-width: 15%;
+     width: 0;
      min-width: 0;
      overflow-y: scroll;
+     /* opacity: 0; */
+     transition: width 0.4s;
+}
+
+.sideBarHidden {
+    /* display: none; */
+}
+
+.sideBarChange  {
+    /* display: block !important; */
+    width: 20%;
+
 }
 
 .sideBar::-webkit-scrollbar {
@@ -39,12 +57,10 @@
      background-color: whitesmoke;
      flex: 4 0 85%;
      padding-top: 4rem;
-     max-width: 85%;
+     /* max-width: 85%; */
 }
 
 .sideBarWrapper {
-    padding: 1rem;
-    margin: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -56,32 +72,76 @@
 .mainWrapper {
     display: flex;
     flex-direction: column;
-    height: calc(100% - 2rem);
+    height: calc(100%);
     min-width: 15%;
     width: 100%;
-    border: 5px solid black;
     /* padding: 1rem; */
 
 }
 
 .navWrapper {
-    padding: 1rem;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    height: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    height: 4rem;
+    width: 100%;
 }
 
-.calender {
-    height: 100%;
+.navHamburger {
+    font-size: larger;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.navDate {
+    display: inline-block;
+    align-self: center;
+    color: white;
+    font-size: larger;
+}
+
+.navAccount {
+    cursor: pointer;
+    border: 0;
+    border-radius: 24px;
+
+}
+
+.bar1, .bar2, .bar3 {
+    width: 30px;
+    height: 4px;
+    background-color: #333;
+    margin: 6px 0;
+    transition: 0.4s ;
+  }
+
+  .change .bar1 {
+  transform: translate(0, 10px) rotate(-45deg);
+}
+
+.change .bar2 {opacity: 0;}
+
+.change .bar3 {
+  transform: translate(0, -10px) rotate(45deg);
+}
+
+.calendarWrapper {
+    width: 100%;
+    /* height: 100%;
     overflow-x: hidden;
-    overflow-wrap: hard;
+    overflow-wrap: hard; */
+}
+
+.calendar, .calendar-content {
+    width: inherit;
 }
 
 .editor {
     background-color: inherit;
     /* width: 100%; */
-    flex: 1 0 100%;
+    /* flex: 1 0 100%; */
     resize: none;
     max-height: calc(95%);
     height: 95%
@@ -98,7 +158,6 @@ textarea:focus {
 }
 
 .ql-editor {
-    padding: 0px !important;
     height: inherit;
     /* max-height: calc(100% - 1.7rem); */
 }
