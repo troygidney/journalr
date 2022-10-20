@@ -1,19 +1,19 @@
 .wrapper {
      display: inline-flex; 
      width: 100vw;
-     height: 100vh;
+     max-height: calc(100vw);
+     height: calc(100vh);
      flex-direction: row;
-     flex-wrap: wrap;
 
 }
 
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
     scrollbar-width: none;
     display: none;
-}
+} */
 
 .nav {
-    background-color: blueviolet;
+    background-color: grey;
     flex: 1 1 100%;
     width: inherit;
     position: fixed;
@@ -22,7 +22,7 @@
 }
 
 .sideBar {
-     background-color: yellow;
+     background-color: whitesmoke;
      flex: 1 0 15%;
      padding-top: 4rem;
      max-width: 15%;
@@ -56,11 +56,11 @@
 .mainWrapper {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: calc(100% - 2rem);
     min-width: 15%;
-    min-height: initial;
-    max-height: initial;
-    overflow-y: hidden;
+    width: 100%;
+    border: 5px solid black;
+    /* padding: 1rem; */
 
 }
 
@@ -78,14 +78,16 @@
     overflow-wrap: hard;
 }
 
-.editor p{
+.editor {
     background-color: inherit;
-    height: 45rem;
-    width: 100%;
+    /* width: 100%; */
     flex: 1 0 100%;
-    border: 0;
     resize: none;
-    overflow-y: scroll;
+    max-height: calc(95%);
+    height: 95%
+}
+
+.editor::-webkit-scrollbar {
 
 }
 
@@ -93,4 +95,10 @@ textarea:focus {
     outline: none;
     border: 0;
     box-shadow: 0 0 10px #719ECE;
+}
+
+.ql-editor {
+    padding: 0px !important;
+    height: inherit;
+    /* max-height: calc(100% - 1.7rem); */
 }
