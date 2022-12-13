@@ -9,7 +9,7 @@ services:
     volumes:
     - ./www/html/:/var/www/html/
   php:
-    image: php:7.0-fpm
+    build: ./php/ 
     container_name: php-container
     expose:
       - 9000:9000
@@ -27,8 +27,8 @@ services:
     volumes_from:  
       - mysql-data  
     environment:   
-      MYSQL_DATABASE: data  
-      MYSQL_USER: data   
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: myuser   
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
     secrets:
       - db_root_password
