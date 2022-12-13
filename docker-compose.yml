@@ -12,7 +12,7 @@ services:
     build: ./php/ 
     container_name: php-container
     expose:
-      - 9000:9000
+      - "9000"
     volumes: 
       - ./www/html/:/var/www/html/
   app-data:    
