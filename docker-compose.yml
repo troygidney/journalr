@@ -11,6 +11,7 @@ services:
   php:
     build: ./php/ 
     container_name: php-container
+    tty: true
     expose:
       - "9000"
     volumes: 

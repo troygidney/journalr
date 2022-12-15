@@ -9,3 +9,4 @@
     RUN php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer
     CMD composer update
     CMD composer dump-autoload
+    CMD bash
