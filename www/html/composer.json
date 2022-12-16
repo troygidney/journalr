@@ -15,5 +15,10 @@
         "ext-pdo_mysql": "*",
         "ext-pdo": "*",
         "google/apiclient": "^2.0"
-    }
+    },
+    "scripts": {
+        "pre-install-cmd": [
+          "Composer\\Config::disableProcessTimeout"
+        ]
+      }
 }
