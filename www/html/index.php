@@ -1,3 +1,9 @@
+<?php 
+require_once './vendor/autoload.php';
+session_start();
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -146,11 +152,28 @@
   </script>
 
 
-<?php echo 'We are running PHP, version: '; ?></p>  
-      <?  
+<?php 
+
+      echo 'We are running PHP, version: '; 
+
+
+      echo "test";
+      print_r($_SESSION);
+
+
+      if (!isset($_SESSION['client'])) {
+
+      } else {
+        $client = $_SESSION['client']; 
+        print_r($_SESSION);
+      }
+
+
+
+
        $database ="mydb";  
        $user = "root";  
-       $password = "Qwaszx1230";  
+       $password = "/run/secrets/db_root_password";  
        $host = "mysql";  
 
        $connection = new PDO("mysql:host={$host};dbname={$database};charset=utf8", $user, $password);  
@@ -167,4 +190,5 @@
             }
           echo "</ul>";
         }
+
         ?>

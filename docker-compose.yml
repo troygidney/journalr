@@ -1,5 +1,8 @@
+version: '3.1'
+
 services:
   nginx:
+    image: journalr/nginx
     build: ./nginx/
     container_name: nginx-container
     ports:
@@ -9,6 +12,7 @@ services:
     volumes:
     - ./www/html/:/var/www/html/
   php:
+    image: journalr/php
     build: ./php/ 
     container_name: php-container
     tty: true
@@ -16,6 +20,8 @@ services:
       - "9000"
     volumes: 
       - ./www/html/:/var/www/html/
+    secrets:
+      - google_secret
   app-data:    
     image: php:7.0-fpm  
     container_name: app-data-container  
@@ -25,12 +31,12 @@ services:
   mysql:    
     image: mysql:5.7  
     container_name: mysql-container  
-    volumes_from:  
-      - mysql-data  
+    volumes:  
+      - /var/lib/mysql  
     environment:   
       MYSQL_DATABASE: mydb
       MYSQL_USER: myuser   
-      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MYSQL_ROOT_PASSWORD: /run/secrets/db_root_password
     secrets:
       - db_root_password
 
@@ -41,9 +47,18 @@ services:
       - /var/lib/mysql  
     command: "true" 
 
+volumes:
+ unused:
+
+# //TODO Create docker network for docker stack 
+
 secrets:
   db_root_password:
+    # external: true // For when docker stack is running
     file: ./secrets/db_root_password.txt
+  google_secret:
+    # external: true // For when docker stack is running
+    file: ./secrets/google_secret.txt
   # nginx:
   #   image: nginx:latest
   #   container_name: nginx-container

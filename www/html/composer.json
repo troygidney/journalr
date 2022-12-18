@@ -14,7 +14,8 @@
     "require": {
         "ext-pdo_mysql": "*",
         "ext-pdo": "*",
-        "google/apiclient": "^2.0"
+        "google/apiclient": "^2.0",
+        "opis/closure": "^3.6"
     },
     "scripts": {
         "pre-install-cmd": [
