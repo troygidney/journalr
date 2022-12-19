@@ -15,13 +15,14 @@ services:
     image: journalr/php
     build: ./php/ 
     container_name: php-container
-    tty: true
+    # tty: true
     expose:
       - "9000"
     volumes: 
       - ./www/html/:/var/www/html/
     secrets:
       - google_secret
+
   app-data:    
     image: php:7.0-fpm  
     container_name: app-data-container  

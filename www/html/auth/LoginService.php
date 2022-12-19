@@ -20,13 +20,7 @@ class LoginService extends \Google\Client{
         if (isset($_SESSION['token'])) {
             $this->setAccessToken($_SESSION['token']);
         }
-        // if (!isset($_GET['code'])) {
 
-        // }
-
-        // print_r ($this);
-
-        // $this->login();
     }
     
 
@@ -58,7 +52,6 @@ class LoginService extends \Google\Client{
 
             echo "Welcome ". $name. ". You are logged in with ". $email;
         }
-        // print_r ($_SESSION);
     }
 
     private function getKey() {
