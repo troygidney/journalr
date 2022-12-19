@@ -87,6 +87,7 @@ body {
     padding: 1rem;
     height: 4rem;
     width: 100%;
+    text-align: center;
 }
 
 .navHamburger {
@@ -96,10 +97,11 @@ body {
 }
 
 .navDate {
-    display: inline-block;
+
     align-self: center;
     color: white;
     font-size: larger;
+    text-align: center;
 }
 
 .navAccount {

@@ -1,6 +1,13 @@
 <?php 
 require_once './vendor/autoload.php';
+require './auth/LoginService.php';
 session_start();
+
+$client = new LoginService();
+$client->validate();
+
+$gauth = new Google_Service_oauth2($client);
+$google_info = $gauth->userinfo->get();
 
 ?>
 
@@ -66,7 +73,14 @@ session_start();
                 <div class="bar3"></div>            
             </div>
             
-            <div id="navDate" class="navDate"></div>
+            <div>
+              <div class="navDate">
+                Hello <?php echo $google_info->name?>, it is currently...
+              </div>
+              <div id="navDate" class="navDate">
+
+              </div>
+            </div>
             
             <a class="navAccount" href="google.ca"><img class="navAccount" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABmJLR0QA/wD/AP+gvaeTAAAE00lEQVRogdWaXWxVRRDHf4DIrcSWlrS0JKKA1TRK0fRBiY0YJIaPNvTBECKWR02MGgUkMdqYqE/GF41Vg/EjfsSoj5poNZgAIQqhfERtkRb1hSqoLZVWqJbWh5l1zzk55/bMuR8Jk0zO7Z79z/xnd+/u7PTCZS6zimSnBrgTaAWagOVAHTBf348DZ4CfgD7gALAXGCmS/0ySAzqBr4BLwLRRJ4Ee4H61VTapAHYCQxlIJ+kQsENtl1TakGVQLOJRPQVsLAXxHPBSCYlH9V3gqmKRbwCOlpG808NAfaHklyHTWm7yTgeVQyZpyED+LPAysA5YrHbm6OcNyDL8M0MQ5pmowLZs/gaexO/7M9l+Cjkb0trvxbjV7jYYH0QOL4DZQDvwHjJ746qnkC9mG/7wvBkYMPh5LS35NiP5BsU1k27WeoEVilmsNtL6Wz8T+QrS7/PjyCgCrAXGDETGgDWKXYEswbQDlncp7TSQ6FLMjcBfBpzTUaBRbXQZcNuTyOdInx6M4A+avRnIO/1abcwn/e50moRZ6DQ4fkUxqwsg77RVbb1qwGx1pGcHAtgWF1WCfKnP+wyYJHFkegyYzmhDDZLeph2BaxT3vQGTpMfV1hIDZhJYAH4GViMnZlo5o89rDZgkcTZ+N2DmIBeo/wO4w+jUBTvXiIsTZ8N6O2wFH0BTno5xUqfPX424OBmK2EwrTeADaMzTMU5W6vNbIy5ODurzViOuEXwANUZwmz4/MuLi5GN9bjDiFgb/mMC2cwwDVcgAHDNig9qrNqqQw9GCvVhIANPAs4pdiS0Pcnoen9Q9lwEfCuCPDAYmgBbFr0Fym7TYUeAuxbZkHMDQtnvSCJ4C3iS8cywH9qXA7tO+TuqAt9SmhcOJYACfGYG3B7CrkLuAk7XA2zooF1RPatvdgX7NMXZ+NPD4NBjAiylBe4BqxSxFdqEpZAl0AZXMLJXAM4qZAj7En8Y1SIaahssLQaMdKQDv40/NDuLvAOeAbn2/BEl7c/q5Q9+dS8C5gtaVwAcp+LQHA6gmfzK3J0D+aezrNY1eAnYFgsg3E/8iW29IehI69+OXza4SEI/qw4FBPZHQ5/MoeZAqcdyo3Kbvt1CakY/qJLBJfa4ivvIdew+Zh1zXgh1367sGbPt8oTqM36LfiLwbIs/Ffkeg4xg+3/ikjOSdvqO+FxIugj2WRB6krOLKid9pWzVy7Jc7gGF8pe8HbRsgRYVuI34t3qJt7diunIXqP/hDrznge91M5J28roBfgEXatg3ZvkpNfgK4V30uAn7W9u605EGm6bACD+L33E2UdjmNAPeoryr1PQ0cQjYZk9Tj65a9QK223wAcKQH5b4Dr1Eet+nTr3q0CsywLBDGIT5+vAB7BXuuP07PAA/hCQUvE59Ks5J3U40fjIlI/dWlFpQbSl4H4ceBB/E4zF3gCfzc4RAEjH5UcUp93zvsJ1/pBirzbkaTvGPCbBnwBqV4cQf5H8Cjh+8AstdUfsN9NhjWfRtYTruf3AQ/hvx8WqVVscPYGMGyVWSUHPE447ZhEfj7wPLAZuAlZehWq9dq2WfscIHyunEZO2LL+x34ekgB+QbZDbhLJKrdSwHIp1o89FhD+scf1yBK5Wt+fRy7hA0iKvB+5G48Wyf/lK/8BRWWPmjCtGGwAAAAASUVORK5CYII="></a>
         </div>
@@ -103,36 +117,13 @@ session_start();
             var dateElement = document.getElementById("navDate");
             dateElement.innerText = new Intl.DateTimeFormat('en-CA', { dateStyle: 'full', timeStyle: 'long', timeZone: 'America/Edmonton' }).format(new Date().getTime());
         }, 1000);
-
     }
-
-
     
     function navToggle(element) {
         element.classList.toggle("change");
         document.getElementById("sidebar").classList.toggle("sideBarChange");
         document.getElementById("sidebar").classList.toggle("sideBarHidden");
-        // if (element.classList.contains("change")) {
-        //     document.getElementById("sidebar").style.display = "block";
-        //     return;
-        // } 
-
-        // document.getElementById("sidebar").style.display = "none";
-
     }
-
-    // var options = {
-    // debug: 'info',
-    // modules: {
-    //     toolbar: '#toolbar'
-    // },
-    // placeholder: 'Compose an epic...'
-    // };
-
-    // var editor = new Quill("#editor", options);
-
-    // Quill.register('modules/toolbar');
-    // var toolbar = Quill.import ( 'modules/toolbar' );
 
     var quill = new Quill('#editor', {
         // debug: 'info',
@@ -140,55 +131,33 @@ session_start();
         scrollingContainer: '#editor',
         theme: 'snow'
     });
-
-    // var quill = new Quill('#editor', {
-    // modules: {
-    //     toolbar: {
-    //     container: '#toolbar'  // Selector for toolbar container
-    //     }
-    // }
-    // });
-
   </script>
 
 
 <?php 
 
-      echo 'We are running PHP, version: '; 
-
-
-      echo "test";
-      print_r($_SESSION);
-
-
-      if (!isset($_SESSION['client'])) {
-
-      } else {
-        $client = $_SESSION['client']; 
-        print_r($_SESSION);
-      }
+      // echo 'We are running PHP, version: '. phpversion(); 
 
 
 
+      //  $database ="mydb";  
+      //  $user = "root";  
+      //  $password = "/run/secrets/db_root_password";  
+      //  $host = "mysql";  
 
-       $database ="mydb";  
-       $user = "root";  
-       $password = "/run/secrets/db_root_password";  
-       $host = "mysql";  
+      //  $connection = new PDO("mysql:host={$host};dbname={$database};charset=utf8", $user, $password);  
+      //  $query = $connection->query("SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_TYPE='BASE TABLE'");  
+      //  $tables = $query->fetchAll(PDO::FETCH_COLUMN);  
 
-       $connection = new PDO("mysql:host={$host};dbname={$database};charset=utf8", $user, $password);  
-       $query = $connection->query("SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_TYPE='BASE TABLE'");  
-       $tables = $query->fetchAll(PDO::FETCH_COLUMN);  
-
-        if (empty($tables)) {
-          echo "<p>There are no tables in database \"{$database}\".</p>";
-        } else {
-          echo "<p>Database \"{$database}\" has the following tables:</p>";
-          echo "<ul>";
-            foreach ($tables as $table) {
-              echo "<li>{$table}</li>";
-            }
-          echo "</ul>";
-        }
+      //   if (empty($tables)) {
+      //     echo "<p>There are no tables in database \"{$database}\".</p>";
+      //   } else {
+      //     echo "<p>Database \"{$database}\" has the following tables:</p>";
+      //     echo "<ul>";
+      //       foreach ($tables as $table) {
+      //         echo "<li>{$table}</li>";
+      //       }
+      //     echo "</ul>";
+      //   }
 
         ?>
