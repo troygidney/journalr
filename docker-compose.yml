@@ -10,7 +10,7 @@ services:
     links:
     - php
     volumes:
-    - ./www/html/:/var/www/html/
+    - ./www/:/var/www/
   php:
     image: journalr/php
     build: ./php/ 
@@ -19,7 +19,7 @@ services:
     expose:
       - "9000"
     volumes: 
-      - ./www/html/:/var/www/html/
+      - ./www/:/var/www/
     secrets:
       - google_secret
 
@@ -27,7 +27,7 @@ services:
     image: php:7.0-fpm  
     container_name: app-data-container  
     volumes:  
-      - ./www/html/:/var/www/html/  
+      - ./www/:/var/www/  
     command: "true"
   mysql:    
     image: mysql:5.7  

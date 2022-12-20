@@ -1,7 +1,7 @@
 <?php 
  
 require_once '../vendor/autoload.php';
-require './LoginService.php';
+require '../../php/auth/LoginService.php';
 
 session_start();
 

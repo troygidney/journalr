@@ -6,43 +6,46 @@ class LoginService extends \Google\Client{
 
     public function __construct() {
 
-        $this->setKey($this->getKey());
+        $this->setKey($this->getKey()); //Get secret
         
-        parent::__construct();
+        parent::__construct(); // Construct Google Client before
 
-        $k = json_decode($this->getKey(), true);
+        $k = json_decode($this->getKey(), true); //Format for auth config
 
         $this->setAuthConfig($k);
 
-        $this->addScope('profile');
+        $this->addScope('profile'); //Add scope of google auth
         $this->addScope('email');
         
-        if (isset($_SESSION['token'])) {
+        if (isset($_SESSION['token'])) { // If the session token is set, add token to google client
             $this->setAccessToken($_SESSION['token']);
         }
 
     }
     
 
-    public function login() {
-        if (isset($_GET['code']) && !isset($_SESSION['token'])) {
-            $token = $this->fetchAccessTokenWithAuthCode($_GET['code']);
-            $this->setAccessToken($token);
+    public function login() { // Login the user
+        if (isset($_GET['code']) && !isset($_SESSION['token'])) { // If a user gets google access token
+            $token = $this->fetchAccessTokenWithAuthCode($_GET['code']); // Fetch access token from auth code in $_GET['code'] supplied from google
+            $this->setAccessToken($token); //Set access token for google client
         
-            $gauth = new Google_Service_oauth2($this);
+            $gauth = new Google_Service_oauth2($this); // TODO: move to own function
             $google_info = $gauth->userinfo->get();
             $email = $google_info->email;
             $name = $google_info->name;
         
             echo "Welcome ". $name. ". You are logged in with ". $email;
-            $_SESSION['token'] = $this->getAccessToken();
+            $_SESSION['token'] = $this->getAccessToken(); //Set session token to access token
         
-
-        } else if (!isset($_SESSION['token'])) {
+            echo 
+            "<script type='text/javascript'>
+                window.location.href = 'http://localhost/';
+            </script>";
+        } else if (!isset($_SESSION['token'])) { // If user is not logged in
             echo "<a href='".$this->createAuthUrl()."'>login with Google</a>" ;
 
 
-        } else if ($this->validate()) {
+        } else if ($this->validate()) { // If a user navigates to login.php
             echo "Logged in<br>";
 
             $gauth = new Google_Service_oauth2($this);
@@ -51,6 +54,10 @@ class LoginService extends \Google\Client{
             $name = $google_info->name;
 
             echo "Welcome ". $name. ". You are logged in with ". $email;
+            echo 
+            "<script type='text/javascript'>
+                window.location.href = 'http://localhost/';
+            </script>";
         }
     }
 
@@ -71,10 +78,13 @@ class LoginService extends \Google\Client{
     }
 
     public function validate() {
-        if (!isset($_SESSION['token']) || $this->isAccessTokenExpired()) echo 
+        if (!isset($_SESSION['token']) || $this->isAccessTokenExpired()) {
+            session_destroy();
+            
+            echo 
         "<script type='text/javascript'>
         window.location.href = 'http://localhost/auth/login.php';
-        </script>";
+        </script>";}
         else return true;
     }
 
