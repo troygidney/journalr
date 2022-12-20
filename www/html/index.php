@@ -1,13 +1,16 @@
 <?php 
 require_once './vendor/autoload.php';
-require './auth/LoginService.php';
+require '../php/auth/LoginService.php';
+require_once '../php/UserInfo.php';
 session_start();
 
 $client = new LoginService();
 $client->validate();
 
-$gauth = new Google_Service_oauth2($client);
-$google_info = $gauth->userinfo->get();
+$google_info = new UserInfo($client);
+
+// $gauth = new Google_Service_oauth2($client);
+// $google_info = $gauth->userinfo->get();
 
 ?>
 
@@ -75,14 +78,14 @@ $google_info = $gauth->userinfo->get();
             
             <div>
               <div class="navDate">
-                Hello <?php echo $google_info->name?>, it is currently...
+                Hello <?php echo $google_info->getName()?>, it is currently...
               </div>
               <div id="navDate" class="navDate">
 
               </div>
             </div>
             
-            <a class="navAccount" href="google.ca"><img class="navAccount" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABmJLR0QA/wD/AP+gvaeTAAAE00lEQVRogdWaXWxVRRDHf4DIrcSWlrS0JKKA1TRK0fRBiY0YJIaPNvTBECKWR02MGgUkMdqYqE/GF41Vg/EjfsSoj5poNZgAIQqhfERtkRb1hSqoLZVWqJbWh5l1zzk55/bMuR8Jk0zO7Z79z/xnd+/u7PTCZS6zimSnBrgTaAWagOVAHTBf348DZ4CfgD7gALAXGCmS/0ySAzqBr4BLwLRRJ4Ee4H61VTapAHYCQxlIJ+kQsENtl1TakGVQLOJRPQVsLAXxHPBSCYlH9V3gqmKRbwCOlpG808NAfaHklyHTWm7yTgeVQyZpyED+LPAysA5YrHbm6OcNyDL8M0MQ5pmowLZs/gaexO/7M9l+Cjkb0trvxbjV7jYYH0QOL4DZQDvwHjJ746qnkC9mG/7wvBkYMPh5LS35NiP5BsU1k27WeoEVilmsNtL6Wz8T+QrS7/PjyCgCrAXGDETGgDWKXYEswbQDlncp7TSQ6FLMjcBfBpzTUaBRbXQZcNuTyOdInx6M4A+avRnIO/1abcwn/e50moRZ6DQ4fkUxqwsg77RVbb1qwGx1pGcHAtgWF1WCfKnP+wyYJHFkegyYzmhDDZLeph2BaxT3vQGTpMfV1hIDZhJYAH4GViMnZlo5o89rDZgkcTZ+N2DmIBeo/wO4w+jUBTvXiIsTZ8N6O2wFH0BTno5xUqfPX424OBmK2EwrTeADaMzTMU5W6vNbIy5ODurzViOuEXwANUZwmz4/MuLi5GN9bjDiFgb/mMC2cwwDVcgAHDNig9qrNqqQw9GCvVhIANPAs4pdiS0Pcnoen9Q9lwEfCuCPDAYmgBbFr0Fym7TYUeAuxbZkHMDQtnvSCJ4C3iS8cywH9qXA7tO+TuqAt9SmhcOJYACfGYG3B7CrkLuAk7XA2zooF1RPatvdgX7NMXZ+NPD4NBjAiylBe4BqxSxFdqEpZAl0AZXMLJXAM4qZAj7En8Y1SIaahssLQaMdKQDv40/NDuLvAOeAbn2/BEl7c/q5Q9+dS8C5gtaVwAcp+LQHA6gmfzK3J0D+aezrNY1eAnYFgsg3E/8iW29IehI69+OXza4SEI/qw4FBPZHQ5/MoeZAqcdyo3Kbvt1CakY/qJLBJfa4ivvIdew+Zh1zXgh1367sGbPt8oTqM36LfiLwbIs/Ffkeg4xg+3/ikjOSdvqO+FxIugj2WRB6krOLKid9pWzVy7Jc7gGF8pe8HbRsgRYVuI34t3qJt7diunIXqP/hDrznge91M5J28roBfgEXatg3ZvkpNfgK4V30uAn7W9u605EGm6bACD+L33E2UdjmNAPeoryr1PQ0cQjYZk9Tj65a9QK223wAcKQH5b4Dr1Eet+nTr3q0CsywLBDGIT5+vAB7BXuuP07PAA/hCQUvE59Ks5J3U40fjIlI/dWlFpQbSl4H4ceBB/E4zF3gCfzc4RAEjH5UcUp93zvsJ1/pBirzbkaTvGPCbBnwBqV4cQf5H8Cjh+8AstdUfsN9NhjWfRtYTruf3AQ/hvx8WqVVscPYGMGyVWSUHPE447ZhEfj7wPLAZuAlZehWq9dq2WfscIHyunEZO2LL+x34ekgB+QbZDbhLJKrdSwHIp1o89FhD+scf1yBK5Wt+fRy7hA0iKvB+5G48Wyf/lK/8BRWWPmjCtGGwAAAAASUVORK5CYII="></a>
+            <a class="navAccount" href="google.ca"><img class="navAccountImg" src="<?php echo $google_info->getPicture() ?>" referrerpolicy="no-referrer"></a>
         </div>
     </div>
 
@@ -96,7 +99,7 @@ $google_info = $gauth->userinfo->get();
 
         </div>
     </div>
-    <div class="main" >
+    <div id="main" class="main" >
         <div class="mainWrapper">
             <div class="editor" id="editor">
                 <!-- <textarea class="" cols="50000" maxlength="50000" wrap="hard" autofocus placeholder="Start Typing..."></textarea> -->
@@ -123,6 +126,11 @@ $google_info = $gauth->userinfo->get();
         element.classList.toggle("change");
         document.getElementById("sidebar").classList.toggle("sideBarChange");
         document.getElementById("sidebar").classList.toggle("sideBarHidden");
+
+        console.log(window.innerWidth);
+        if (window.innerWidth <= 600)
+          document.getElementById("main").classList.toggle("mainHidden");
+
     }
 
     var quill = new Quill('#editor', {
