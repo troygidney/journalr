@@ -51,7 +51,20 @@ body {
         /* display: block !important; */
         width: 100% !important
     }
-    
+
+    .navDate {
+        padding-left: 5%;
+        padding-right: 5%;
+        font-size: small !important;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+
+    .navDate {
+        padding-left: 15%;
+        padding-right: 15%;
+    }
 }
 
 .sideBar::-webkit-scrollbar {
@@ -107,7 +120,6 @@ body {
 }
 
 .navDate {
-
     align-self: center;
     color: white;
     font-size: larger;
@@ -153,6 +165,10 @@ body {
 
 .calendar, .calendar-content {
     width: inherit;
+}
+
+.whitesmoke {
+    color: whitesmoke;
 }
 
 .editor {

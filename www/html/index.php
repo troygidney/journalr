@@ -2,6 +2,7 @@
 require_once './vendor/autoload.php';
 require '../php/auth/LoginService.php';
 require_once '../php/UserInfo.php';
+require_once '../php/SQLDB.php';
 
 use benhall14\phpCalendar\Calendar as Calendar;
 
@@ -10,23 +11,25 @@ session_start();
 $client = new LoginService();
 $client->validate();
 
-$google_info = new UserInfo($client);
-
-$calendarId = 'primary';
-$optParams = array(
-  'maxResults' => 10,
-  'orderBy' => 'startTime',
-  'singleEvents' => TRUE,
-  'timeMin' => date('c'),
-);
-
-$service = new Google_Service_Calendar($client);
-$results = $service->events->listEvents($calendarId, $optParams);
-
 date_default_timezone_set("America/Edmonton");
 
+$google_info = new UserInfo($client);
+
+
+// $calendarId = 'primary';
+// $optParams = array(
+//   'maxResults' => 10,
+//   'orderBy' => 'startTime',
+//   'singleEvents' => TRUE,
+//   'timeMin' => date('c'),
+// );
+
+// $service = new Google_Service_Calendar($client);
+// $results = $service->events->listEvents($calendarId, $optParams);
+
+
 $calendar = new Calendar();
-$calendar->useWeekView();
+$calendar->useMonthView();
 
 // $events = $calendar->findEvents($running_day);
 
@@ -50,6 +53,9 @@ $calendar->useWeekView();
 
 // $gauth = new Google_Service_oauth2($client);
 // $google_info = $gauth->userinfo->get();
+
+$sqldb = new SQLDB();
+
 
 ?>
 
@@ -106,19 +112,20 @@ $calendar->useWeekView();
 
     <div class="nav">
          <div class="navWrapper">
-            <div class="navHamburger" onclick="navToggle(this)">
+            <div id="navHamburger" class="navHamburger" onclick="navToggle(this)">
                 <div class="bar1"></div>
                 <div class="bar2"></div>
                 <div class="bar3"></div>            
             </div>
             
             <div>
-              <div class="navDate">
-                Hello <?php echo $google_info->getName()?>, it is currently...
-              </div>
-              <div id="navDate" class="navDate">
-
-              </div>
+               <div>
+                    <div class="navDate">
+                         Hello <?php echo $google_info->getName()?>, it is currently...
+                    </div>
+                    <div id="navDate" class="navDate">
+                     </div>
+               </div>
             </div>
             
             <a class="navAccount" href="google.ca"><img class="navAccountImg" src="<?php echo $google_info->getPicture() ?>" referrerpolicy="no-referrer"></a>
@@ -129,7 +136,7 @@ $calendar->useWeekView();
         <div class="sideBarWrapper">
             
             <div class="calendarWrapper">
-                <?php  $calendar->display(); ?>
+                <?php  $calendar->display(false, "grey"); ?>
             </div>
 
 
@@ -150,12 +157,24 @@ $calendar->useWeekView();
 
   <script>
 
-    function load(x) {
+    function load(x) { 
 
         setInterval(function() {
             var dateElement = document.getElementById("navDate");
             dateElement.innerText = new Intl.DateTimeFormat('en-CA', { dateStyle: 'full', timeStyle: 'long', timeZone: 'America/Edmonton' }).format(new Date().getTime());
         }, 1000);
+
+        resizeListener();
+    }
+
+    function resizeListener() {
+     window.addEventListener("resize", (event) => {
+          if (window.innerWidth <= 600 && document.getElementById("sidebar").classList.contains("sideBarChange")) {
+               document.getElementById("main").classList.add("mainHidden");
+               navToggle(document.getElementById("navHamburger"));
+          }
+          console.log(window.innerWidth);
+     });
     }
     
     function navToggle(element) {
@@ -163,10 +182,8 @@ $calendar->useWeekView();
         document.getElementById("sidebar").classList.toggle("sideBarChange");
         document.getElementById("sidebar").classList.toggle("sideBarHidden");
 
-        console.log(window.innerWidth);
         if (window.innerWidth <= 600)
           document.getElementById("main").classList.toggle("mainHidden");
-
     }
 
     var quill = new Quill('#editor', {
@@ -184,24 +201,6 @@ $calendar->useWeekView();
 
 
 
-      //  $database ="mydb";  
-      //  $user = "root";  
-      //  $password = "/run/secrets/db_root_password";  
-      //  $host = "mysql";  
 
-      //  $connection = new PDO("mysql:host={$host};dbname={$database};charset=utf8", $user, $password);  
-      //  $query = $connection->query("SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_TYPE='BASE TABLE'");  
-      //  $tables = $query->fetchAll(PDO::FETCH_COLUMN);  
-
-      //   if (empty($tables)) {
-      //     echo "<p>There are no tables in database \"{$database}\".</p>";
-      //   } else {
-      //     echo "<p>Database \"{$database}\" has the following tables:</p>";
-      //     echo "<ul>";
-      //       foreach ($tables as $table) {
-      //         echo "<li>{$table}</li>";
-      //       }
-      //     echo "</ul>";
-      //   }
 
         ?>
