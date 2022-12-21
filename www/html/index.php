@@ -2,12 +2,51 @@
 require_once './vendor/autoload.php';
 require '../php/auth/LoginService.php';
 require_once '../php/UserInfo.php';
+
+use benhall14\phpCalendar\Calendar as Calendar;
+
 session_start();
 
 $client = new LoginService();
 $client->validate();
 
 $google_info = new UserInfo($client);
+
+$calendarId = 'primary';
+$optParams = array(
+  'maxResults' => 10,
+  'orderBy' => 'startTime',
+  'singleEvents' => TRUE,
+  'timeMin' => date('c'),
+);
+
+$service = new Google_Service_Calendar($client);
+$results = $service->events->listEvents($calendarId, $optParams);
+
+date_default_timezone_set("America/Edmonton");
+
+$calendar = new Calendar();
+$calendar->useWeekView();
+
+// $events = $calendar->findEvents($running_day);
+
+// print_r ($events);
+
+
+
+
+// if (count($results->getItems()) == 0) {
+//   print "No upcoming events found.\n";
+// } else {
+//   print "Upcoming events:\n";
+//   foreach ($results->getItems() as $event) {
+//     $start = $event->start->dateTime;
+//     if (empty($start)) {
+//       $start = $event->start->date;
+//     }
+//     printf("%s (%s)\n", $event->getSummary(), $start);
+//   }
+// }
 
 // $gauth = new Google_Service_oauth2($client);
 // $google_info = $gauth->userinfo->get();
@@ -39,9 +78,6 @@ $google_info = new UserInfo($client);
   <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
   <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
   <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-
-  <link rel="stylesheet" href="https://cdn.metroui.org.ua/v4/css/metro-all.min.css">
-  <script src="https://cdn.metroui.org.ua/v4/js/metro.min.js"></script>
 
   <link href="assets/css/style.css" rel="stylesheet">
 
@@ -93,7 +129,7 @@ $google_info = new UserInfo($client);
         <div class="sideBarWrapper">
             
             <div class="calendarWrapper">
-                <div data-role="calendar" data-picker-mode="true" data-buttons="today"></div>
+                <?php  $calendar->display(); ?>
             </div>
 
 

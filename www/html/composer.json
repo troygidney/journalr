@@ -15,7 +15,7 @@
         "ext-pdo_mysql": "*",
         "ext-pdo": "*",
         "google/apiclient": "^2.0",
-        "opis/closure": "^3.6"
+        "benhall14/php-calendar": "^1.4"
     },
     "scripts": {
         "pre-install-cmd": [

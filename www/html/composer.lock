@@ -4,8 +4,57 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "04543a70d26766f8f7f06a1fd430b266",
+    "content-hash": "a00f5c31d11c644fc073ed7f76812c9a",
     "packages": [
+        {
+            "name": "benhall14/php-calendar",
+            "version": "1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/benhall14/php-calendar.git",
+                "reference": "274ab6d3214cb530ebd7d158f5752a74ceb4f9e6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/benhall14/php-calendar/zipball/274ab6d3214cb530ebd7d158f5752a74ceb4f9e6",
+                "reference": "274ab6d3214cb530ebd7d158f5752a74ceb4f9e6",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "benhall14\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Benjamin Hall",
+                    "email": "ben@conobe.co.uk",
+                    "homepage": "https://github.com/benhall14",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A simple PHP class to generate calendars.",
+            "homepage": "https://github.com/benhall14/php-calendar",
+            "keywords": [
+                "calendar",
+                "calendars",
+                "date",
+                "time"
+            ],
+            "support": {
+                "issues": "https://github.com/benhall14/php-calendar/issues",
+                "source": "https://github.com/benhall14/php-calendar/tree/1.4"
+            },
+            "time": "2022-11-04T18:11:58+00:00"
+        },
         {
             "name": "firebase/php-jwt",
             "version": "v5.5.1",

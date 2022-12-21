@@ -16,6 +16,8 @@ class LoginService extends \Google\Client{
 
         $this->addScope('profile'); //Add scope of google auth
         $this->addScope('email');
+        $this->addScope(Google_Service_Calendar::CALENDAR);
+
         
         if (isset($_SESSION['token'])) { // If the session token is set, add token to google client
             $this->setAccessToken($_SESSION['token']);
