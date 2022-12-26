@@ -30,13 +30,7 @@ class LoginService extends \Google\Client{
         if (isset($_GET['code']) && !isset($_SESSION['token'])) { // If a user gets google access token
             $token = $this->fetchAccessTokenWithAuthCode($_GET['code']); // Fetch access token from auth code in $_GET['code'] supplied from google
             $this->setAccessToken($token); //Set access token for google client
-        
-            $gauth = new Google_Service_oauth2($this); // TODO: move to own function
-            $google_info = $gauth->userinfo->get();
-            $email = $google_info->email;
-            $name = $google_info->name;
-        
-            echo "Welcome ". $name. ". You are logged in with ". $email;
+
             $_SESSION['token'] = $this->getAccessToken(); //Set session token to access token
         
             echo 
@@ -50,12 +44,6 @@ class LoginService extends \Google\Client{
         } else if ($this->validate()) { // If a user navigates to login.php
             echo "Logged in<br>";
 
-            $gauth = new Google_Service_oauth2($this);
-            $google_info = $gauth->userinfo->get();
-            $email = $google_info->email;
-            $name = $google_info->name;
-
-            echo "Welcome ". $name. ". You are logged in with ". $email;
             echo 
             "<script type='text/javascript'>
                 window.location.href = 'http://localhost/';
