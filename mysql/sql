@@ -1,0 +1,59 @@
+-- Active: 1671603706741@@127.0.0.1@3306@data
+CREATE TABLE user_info (  
+    id int NOT NULL PRIMARY KEY COMMENT 'Primary Key',
+    create_time DATETIME COMMENT 'Create Time'
+) COMMENT '';
+
+CREATE TABLE user_data (  
+    date DATETIME UNIQUE, # Change to int's for data abstraction 
+    owner_id int UNIQUE COMMENT "PAGE OWNER ID",
+    data_refrence VARCHAR(255) PRIMARY KEY, 
+    INDEX (owner_id),
+    FOREIGN KEY (owner_id) REFERENCES user_info (id)
+);
+
+CREATE TABLE user_data_content (  
+    data_id VARCHAR(255) UNIQUE COMMENT "PAGE ID",
+    data_content LONGTEXT,
+    INDEX (data_id),
+    FOREIGN KEY (data_id) REFERENCES user_data (data_refrence)
+) COMMENT '';
+
+
+
+    insert into 
+      user_info (
+        id, 
+        create_time
+      )
+    values
+      (
+        "12345", 
+        "1970-01-01 00:00:01"
+      );
+
+
+
+insert into 
+  user_data (
+    `date`, 
+    owner_id, 
+    data_refrence
+  )
+values
+  (
+    "1970-01-01 00:00:01", 
+    "12345", 
+    "XYZ=="
+  );
+  
+  insert into 
+    user_data_content (
+      data_id, 
+      data_content
+    )
+  values
+    (
+      "XYZ==", 
+      "dawdad;laiujwehfa;iuwhflawurhfng;wrheng;paiuehrgpndfgjgnzdlfgjnaldfjgbnap;ieriuhg"
+    );

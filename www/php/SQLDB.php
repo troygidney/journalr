@@ -32,7 +32,7 @@ class SQLDB  {
         $query = $this->connection->query("SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_TYPE='BASE TABLE'");  
         $tables = $query->fetchAll(PDO::FETCH_COLUMN);
 
-        print_r ($tables);
+        // print_r ($tables);
       }
 
 }
