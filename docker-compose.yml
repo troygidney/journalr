@@ -24,13 +24,14 @@ services:
       - google_secret
 
   app-data:    
-    image: php:7.0-fpm  
+    image: php:7.0-fpm
     container_name: app-data-container  
     volumes:  
       - ./www/:/var/www/  
     command: "true"
   mysql:    
-    image: mysql:5.7  
+    image: journalr/mysql
+    build: ./mysql/  
     container_name: mysql-container  
     volumes:  
       - /var/lib/mysql  
