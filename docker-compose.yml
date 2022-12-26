@@ -34,7 +34,8 @@ services:
     build: ./mysql/  
     container_name: mysql-container  
     volumes:  
-      - /var/lib/mysql  
+      - /var/lib/mysql
+      - ./mysql/sql:/docker-entrypoint-initdb.d/sql.sql
     environment:   
       MYSQL_DATABASE: data
       MYSQL_USER: datauser
@@ -47,7 +48,8 @@ services:
     image: mysql:5.7  
     container_name: mysql-data-container  
     volumes:  
-      - /var/lib/mysql  
+      - /var/lib/mysql
+      - ./mysql/sql:/docker-entrypoint-initdb.d/sql.sql
     command: "true" 
 
 volumes:
