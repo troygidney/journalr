@@ -1,5 +1,7 @@
 <?php
 
+use Google\Auth;
+
 class LoginService extends \Google\Client{
 
      const FILEPATH = "/run/secrets/google_secret";
@@ -16,7 +18,7 @@ class LoginService extends \Google\Client{
 
         $this->addScope('profile'); //Add scope of google auth
         $this->addScope('email');
-        $this->addScope(Google_Service_Calendar::CALENDAR);
+        $this->addScope(Google\Service\Calendar::CALENDAR);
 
         
         if (isset($_SESSION['token'])) { // If the session token is set, add token to google client
@@ -32,22 +34,45 @@ class LoginService extends \Google\Client{
             $this->setAccessToken($token); //Set access token for google client
 
             $_SESSION['token'] = $this->getAccessToken(); //Set session token to access token
-        
-            echo 
-            "<script type='text/javascript'>
-                window.location.href = 'http://localhost/';
-            </script>";
+
+            $userinfo = new UserInfo($this); // Change to own  function 
+            $db = new SQLDB();
+
+            $id = $userinfo->getID();
+            $_SESSION['id'] = $id;
+
+            try { // This currently will always try to insert the user id, after one seccessful insert the primary key restriction fails all other inserts
+                $stmt = $db->getCon()->query("INSERT INTO data.user_info (id,create_time) VALUES (". $id .",".  time() .")");
+
+            } catch (PDOException $e) {
+                if ($e->getCode() == 23000) {
+                    // echo "User data exists.";
+                }
+            }
+            // $result = $stmt->execute([$id, time()]);
+
+            Header("Location: /");
         } else if (!isset($_SESSION['token'])) { // If user is not logged in
             echo "<a href='".$this->createAuthUrl()."'>login with Google</a>" ;
 
 
         } else if ($this->validate()) { // If a user navigates to login.php
-            echo "Logged in<br>";
+            // echo "Logged in<br>";
 
-            echo 
-            "<script type='text/javascript'>
-                window.location.href = 'http://localhost/';
-            </script>";
+            $userinfo = new UserInfo($this);
+            $db = new SQLDB();
+
+            $id = $userinfo->getID();
+
+            try {
+                $stmt = $db->getCon()->query("INSERT INTO data.user_info (id,create_time) VALUES (". $id .",".  time() .")");
+            } catch (PDOException $e) {
+                if ($e->getCode() == 23000) {
+                    // echo "User data exists.";
+                }
+            }
+
+            Header("Location: /");
         }
     }
 
@@ -71,10 +96,12 @@ class LoginService extends \Google\Client{
         if (!isset($_SESSION['token']) || $this->isAccessTokenExpired()) {
             session_destroy();
             
-            echo 
-        "<script type='text/javascript'>
-        window.location.href = 'http://localhost/auth/login.php';
-        </script>";}
+            Header("Location: /auth/login.php");
+        }
+        //     echo 
+        // "<script type='text/javascript'>
+        // window.location.href = 'http://localhost/auth/login.php';
+        // </script>";}
         else return true;
     }
 

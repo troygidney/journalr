@@ -9,9 +9,9 @@
 
     public function __construct($client) {
         if (isset($_SESSION['token'])) {
-            $this->gauth = new Google_Service_oauth2($client);
+            $this->gauth = new Google\Service\oauth2($client);
             $this->google_info = $this->gauth->userinfo->get();
-            $this->service = new Google_Service_Calendar($client);
+            $this->service = new Google\Service\Calendar($client);
         }
     }
 
@@ -25,6 +25,10 @@
 
     public function getEmail() {
         return $this->google_info->email;
+    }
+
+    public function getID() {
+        return $this->google_info->id;
     }
 
     public function getPicture() {
