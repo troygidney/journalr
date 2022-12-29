@@ -45,7 +45,7 @@ services:
       - db_root_password
 
   mysql-data:    
-    image: mysql:5.7  
+    image: devilbox/mysql:mariadb-10.3  
     container_name: mysql-data-container  
     volumes:  
       - /var/lib/mysql
