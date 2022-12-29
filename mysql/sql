@@ -1,13 +1,13 @@
 use data;
 
 CREATE TABLE user_info (  
-    id int NOT NULL PRIMARY KEY COMMENT 'Primary Key',
+    id VARCHAR(255) NOT NULL PRIMARY KEY COMMENT 'Primary Key',
     create_time int COMMENT 'Create Time'
 ) COMMENT '';
 
 CREATE TABLE user_data (  
     date int UNIQUE,
-    owner_id int UNIQUE COMMENT "PAGE OWNER ID",
+    owner_id VARCHAR(255) UNIQUE COMMENT "PAGE OWNER ID",
     data_refrence VARCHAR(255) PRIMARY KEY, 
     INDEX (owner_id),
     FOREIGN KEY (owner_id) REFERENCES user_info (id)
