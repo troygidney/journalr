@@ -1,13 +1,13 @@
 <?php
 
-require_once '/var/www/php/UserInfo.php';
-require_once '/var/www/php/SQLDB.php';
+// use Google\Auth;
 
-use Google\Auth;
+include "/var/www/php/UserInfo.php";
+include "/var/www/php/SQLDB.php";
 
 class LoginService extends \Google\Client{
 
-     const FILEPATH = "/run/secrets/google_secret";
+     private $FILEPATH = "/run/secrets/google_secret";
 
     public function __construct() {
 
@@ -38,8 +38,8 @@ class LoginService extends \Google\Client{
 
             $_SESSION['token'] = $this->getAccessToken(); //Set session token to access token
 
-            $userinfo = new UserInfo($this); // Change to own  function 
             $db = new SQLDB();
+            $userinfo = new UserInfo($this, $db); // Change to own  function 
 
             $id = $userinfo->getID();
             $_SESSION['id'] = $id;
@@ -62,8 +62,8 @@ class LoginService extends \Google\Client{
         } else if ($this->validate()) { // If a user navigates to login.php
             // echo "Logged in<br>";
 
-            $userinfo = new UserInfo($this);
             $db = new SQLDB();
+            $userinfo = new UserInfo($this, $db); // Change to own  function 
 
             $id = $userinfo->getID();
 
@@ -84,7 +84,7 @@ class LoginService extends \Google\Client{
         
         // $clientSecret = fopen(self::FILEPATH, "r", true) or die("Server Config Error!");
 
-        $file = fopen(self::FILEPATH, "r", true) or die("Server Config Error!");
+        $file = fopen($this->FILEPATH, "r", true) or die("Server Config Error!");
         $clientSecret = fread($file,filesize("/run/secrets/google_secret"));
         fclose($file);
         

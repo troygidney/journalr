@@ -13,7 +13,9 @@ $client->validate();
 
 date_default_timezone_set("America/Edmonton");
 
-$google_info = new UserInfo($client);
+$sqldb = new SQLDB();
+
+$google_info = new UserInfo($client, $sqld);
 
 
 // $calendarId = 'primary';
@@ -54,7 +56,7 @@ $calendar->useMonthView();
 // $gauth = new Google_Service_oauth2($client);
 // $google_info = $gauth->userinfo->get();
 
-$sqldb = new SQLDB();
+
 
 
 ?>
