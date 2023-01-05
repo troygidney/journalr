@@ -38,8 +38,8 @@ class LoginService extends \Google\Client{
 
             $_SESSION['token'] = $this->getAccessToken(); //Set session token to access token
 
-            $userinfo = new UserInfo($this); // Change to own  function 
             $db = new SQLDB();
+            $userinfo = new UserInfo($this, $db); // Change to own  function 
 
             $id = $userinfo->getID();
             $_SESSION['id'] = $id;
