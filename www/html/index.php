@@ -1,8 +1,8 @@
 <?php 
 require_once './vendor/autoload.php';
-require '../php/auth/LoginService.php';
-require_once '../php/UserInfo.php';
-require_once '../php/SQLDB.php';
+require '/var/www/php/auth/LoginService.php';
+require_once '/var/www/php/UserInfo.php';
+require_once '/var/www/php/SQLDB.php';
 
 use benhall14\phpCalendar\Calendar as Calendar;
 
@@ -101,7 +101,28 @@ $sqldb = new SQLDB();
     <!-- <link href="assets/vendor/quill/quill.core.css" rel="stylesheet"> -->
     <!-- <script src="assets/vendor/quill/quill.core.js"></script> -->
 
+    <script src='./assets/vendor/fullcalendar-6.0.2/dist/index.global.js'></script>
 
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            timeZone: 'MTC',
+            initialView: 'dayGridMonth',
+            events: 'https://fullcalendar.io/api/demo-feeds/events.json',
+            editable: true,
+            selectable: true,
+            height: (document.getElementById("sidebarWrapper").offsetHeight / 2)
+        });
+        
+        calendar.render();
+        });
+
+        calendar.
+
+    </script>
 
 </head>
 
@@ -128,15 +149,15 @@ $sqldb = new SQLDB();
                </div>
             </div>
             
-            <a class="navAccount" href="google.ca"><img class="navAccountImg" src="<?php echo $google_info->getPicture() ?>" referrerpolicy="no-referrer"></a>
+            <a class="navAccount" onclick="return calendar.render();" ><img class="navAccountImg" src="<?php echo $google_info->getPicture() ?>" referrerpolicy="no-referrer"></a>
         </div>
     </div>
 
     <div id="sidebar" class="sideBar sideBarHidden">
-        <div class="sideBarWrapper">
+        <div id="sidebarWrapper" class="sideBarWrapper">
             
-            <div class="calendarWrapper">
-                <?php  $calendar->display(false, "grey"); ?>
+            <div id="calendar" class="calendarWrapper">
+                
             </div>
 
 

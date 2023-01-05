@@ -1,5 +1,8 @@
 <?php
 
+require_once '/var/www/php/UserInfo.php';
+require_once '/var/www/php/SQLDB.php';
+
 use Google\Auth;
 
 class LoginService extends \Google\Client{
