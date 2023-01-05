@@ -1,10 +1,13 @@
 <?php
 
-use Google\Auth;
+// use Google\Auth;
+
+include "/var/www/php/UserInfo.php";
+include "/var/www/php/SQLDB.php";
 
 class LoginService extends \Google\Client{
 
-     const FILEPATH = "/run/secrets/google_secret";
+     private $FILEPATH = "/run/secrets/google_secret";
 
     public function __construct() {
 
@@ -81,7 +84,7 @@ class LoginService extends \Google\Client{
         
         // $clientSecret = fopen(self::FILEPATH, "r", true) or die("Server Config Error!");
 
-        $file = fopen(self::FILEPATH, "r", true) or die("Server Config Error!");
+        $file = fopen($this->FILEPATH, "r", true) or die("Server Config Error!");
         $clientSecret = fread($file,filesize("/run/secrets/google_secret"));
         fclose($file);
         
