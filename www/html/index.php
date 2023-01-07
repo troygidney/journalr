@@ -105,24 +105,31 @@ $calendar->useMonthView();
 
     <script src='./assets/vendor/fullcalendar-6.0.2/dist/index.global.js'></script>
 
+    <link rel="stylesheet" type="text/css" href="https://bootswatch.com/4/litera/bootstrap.min.css">
+
     <script>
+
+        var calendar;
 
         document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
 
-        var calendar = new FullCalendar.Calendar(calendarEl, {
+        var calendarVar = new FullCalendar.Calendar(calendarEl, {
             timeZone: 'MTC',
             initialView: 'dayGridMonth',
-            events: 'https://fullcalendar.io/api/demo-feeds/events.json',
             editable: true,
             selectable: true,
-            height: (document.getElementById("sidebarWrapper").offsetHeight / 2)
+            // height: (document.getElementById("sidebarWrapper").offsetHeight),
+            contentHeight:"auto",
+            headerToolbar: { center: 'dayGridMonth,timeGridWeek' }, // buttons for switching between views
         });
         
-        calendar.render();
+        calendarVar.render(); //Init render for calendar
+
+        calendar = calendarVar;
         });
 
-        calendar.
+        // calendar.
 
     </script>
 
@@ -133,7 +140,7 @@ $calendar->useMonthView();
 
 <div class="wrapper">
 
-    <div class="nav">
+    <div class="nav" style="z-index: 10;">
          <div class="navWrapper">
             <div id="navHamburger" class="navHamburger" onclick="navToggle(this)">
                 <div class="bar1"></div>
@@ -151,14 +158,14 @@ $calendar->useMonthView();
                </div>
             </div>
             
-            <a class="navAccount" onclick="return calendar.render();" ><img class="navAccountImg" src="<?php echo $google_info->getPicture() ?>" referrerpolicy="no-referrer"></a>
+            <a class="navAccount" onclick="calendar.render()" ><img class="navAccountImg" src="<?php echo $google_info->getPicture() ?>" referrerpolicy="no-referrer"></a>
         </div>
     </div>
 
     <div id="sidebar" class="sideBar sideBarHidden">
         <div id="sidebarWrapper" class="sideBarWrapper">
             
-            <div id="calendar" class="calendarWrapper">
+            <div id="calendar" class="calendarWrapper  fc fc-ltr fc-bootstrap4">
                 
             </div>
 
@@ -192,9 +199,11 @@ $calendar->useMonthView();
 
     function resizeListener() {
      window.addEventListener("resize", (event) => {
-          if (window.innerWidth <= 600 && document.getElementById("sidebar").classList.contains("sideBarChange")) {
+          if (window.innerWidth <= 796 && document.getElementById("sidebar").classList.contains("sideBarChange")) {
                document.getElementById("main").classList.add("mainHidden");
                navToggle(document.getElementById("navHamburger"));
+          } else {
+            document.getElementById("main").classList.remove("mainHidden");
           }
           console.log(window.innerWidth);
      });
@@ -205,8 +214,16 @@ $calendar->useMonthView();
         document.getElementById("sidebar").classList.toggle("sideBarChange");
         document.getElementById("sidebar").classList.toggle("sideBarHidden");
 
-        if (window.innerWidth <= 600)
+        document.getElementById("calendar").style.visability = "hidden";
+        setTimeout(function() {
+            document.getElementById("calendar").style.visability = "visible";
+            console.log("render!");
+                calendar.updateSize();
+            }, 400); 
+
+        if (window.innerWidth <= 796)
           document.getElementById("main").classList.toggle("mainHidden");
+
     }
 
     var quill = new Quill('#editor', {
