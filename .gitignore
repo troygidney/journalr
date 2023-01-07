@@ -1,6 +1,6 @@
 node_modules
 secrets/*
-www/html/vendor
+www/vendor
 nginx/fullchain.pem
 nginx/privkey.pem
 

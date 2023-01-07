@@ -1,7 +1,7 @@
 <?php
 
 // use Google\Auth;
-
+require_once '/var/www/vendor/autoload.php';
 include "/var/www/php/UserInfo.php";
 include "/var/www/php/SQLDB.php";
 

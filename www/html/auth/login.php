@@ -1,6 +1,6 @@
 <?php 
  
-require_once '../vendor/autoload.php';
+require_once '/var/www/vendor/autoload.php';
 require '/var/www/php/auth/LoginService.php';
 
 session_start();

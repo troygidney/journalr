@@ -1,5 +1,5 @@
 <?php 
-require_once './vendor/autoload.php';
+require_once '/var/www/vendor/autoload.php';
 require '/var/www/php/auth/LoginService.php';
 require_once '/var/www/php/UserInfo.php';
 require_once '/var/www/php/SQLDB.php';
