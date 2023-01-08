@@ -1,4 +1,7 @@
 <?php 
+
+require_once '/var/www/html/vendor/autoload.php';
+
  class UserInfo{
 
     private $connecion;
@@ -11,7 +14,7 @@
 
     public function __construct($client, $connection) {
         if (isset($_SESSION['token'])) {
-            $this->gauth = new Google\Service\oauth2($client);
+            $this->gauth = new Google\Service\Oauth2($client);
             $this->google_info = $this->gauth->userinfo->get();
             $this->service = new Google\Service\Calendar($client);
         }
