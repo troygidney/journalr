@@ -17,48 +17,6 @@ $sqldb = new SQLDB();
 
 $google_info = new UserInfo($client, $sqld);
 
-
-// $calendarId = 'primary';
-// $optParams = array(
-//   'maxResults' => 10,
-//   'orderBy' => 'startTime',
-//   'singleEvents' => TRUE,
-//   'timeMin' => date('c'),
-// );
-
-// $service = new Google_Service_Calendar($client);
-// $results = $service->events->listEvents($calendarId, $optParams);
-
-
-$calendar = new Calendar();
-$calendar->useMonthView();
-
-// $events = $calendar->findEvents($running_day);
-
-// print_r ($events);
-
-
-
-
-// if (count($results->getItems()) == 0) {
-//   print "No upcoming events found.\n";
-// } else {
-//   print "Upcoming events:\n";
-//   foreach ($results->getItems() as $event) {
-//     $start = $event->start->dateTime;
-//     if (empty($start)) {
-//       $start = $event->start->date;
-//     }
-//     printf("%s (%s)\n", $event->getSummary(), $start);
-//   }
-// }
-
-// $gauth = new Google_Service_oauth2($client);
-// $google_info = $gauth->userinfo->get();
-
-
-
-
 ?>
 
 <!DOCTYPE html>
@@ -68,7 +26,7 @@ $calendar->useMonthView();
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Planner</title>
+  <title>Journalr</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
   <meta name="metro4:init" content="true">
@@ -104,6 +62,7 @@ $calendar->useMonthView();
     <!-- <script src="assets/vendor/quill/quill.core.js"></script> -->
 
     <script src='./assets/vendor/fullcalendar-6.0.2/dist/index.global.js'></script>
+    <script src="./assets/js/editor.js"></script>
 
     <link rel="stylesheet" type="text/css" href="https://bootswatch.com/4/litera/bootstrap.min.css">
 
@@ -127,6 +86,15 @@ $calendar->useMonthView();
         calendarVar.render(); //Init render for calendar
 
         calendar = calendarVar;
+
+        const editor = new EditorJS('editorjs');
+        console.log(editor);
+
+
+
+
+
+
         });
 
         // calendar.
@@ -174,7 +142,7 @@ $calendar->useMonthView();
     </div>
     <div id="main" class="main" >
         <div class="mainWrapper">
-            <div class="editor" id="editor">
+            <div class="editor" style="background-color: white;" id="editorjs">
                 <!-- <textarea class="" cols="50000" maxlength="50000" wrap="hard" autofocus placeholder="Start Typing..."></textarea> -->
             </div>
             
@@ -226,12 +194,12 @@ $calendar->useMonthView();
 
     }
 
-    var quill = new Quill('#editor', {
-        // debug: 'info',
-        placeholder: 'Start Typing...',
-        scrollingContainer: '#editor',
-        theme: 'snow'
-    });
+    // var quill = new Quill('#editor', {
+    //     // debug: 'info',
+    //     placeholder: 'Start Typing...',
+    //     scrollingContainer: '#editor',
+    //     theme: 'snow'
+    // });
   </script>
 
 
