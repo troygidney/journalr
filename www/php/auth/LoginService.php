@@ -19,6 +19,9 @@ class LoginService extends \Google\Client{
 
         $this->setAuthConfig($k);
 
+        $this->setAccessType('offline');
+        $this->setApprovalPrompt('force');
+
         $this->addScope('profile'); //Add scope of google auth
         $this->addScope('email');
         $this->addScope(Google\Service\Calendar::CALENDAR);
