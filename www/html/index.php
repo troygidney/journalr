@@ -69,6 +69,8 @@ $google_info = new UserInfo($client, $sqld);
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/embed@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/quote@latest"></script>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
 
     <script src="./assets/js/editor.js"></script>
 
@@ -77,6 +79,7 @@ $google_info = new UserInfo($client, $sqld);
     <script>
 
         var calendar;
+        var editor;
 
         document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
@@ -95,7 +98,7 @@ $google_info = new UserInfo($client, $sqld);
 
         calendar = calendarVar;
 
-        const editor = new EditorJS({
+        const editorVar = new EditorJS({
             holder: 'editorjs',
             tools: {
                 header: {
@@ -132,17 +135,10 @@ $google_info = new UserInfo($client, $sqld);
 
 
         });
-        console.log(editor);
 
-
-
-
-
+        editor = editorVar;
 
         });
-
-        // calendar.
-
     </script>
 
 </head>
@@ -187,7 +183,6 @@ $google_info = new UserInfo($client, $sqld);
     <div id="main" class="main" >
         <div class="mainWrapper">
             <div class="editor" style="background-color: white;" id="editorjs">
-                <!-- <textarea class="" cols="50000" maxlength="50000" wrap="hard" autofocus placeholder="Start Typing..."></textarea> -->
             </div>
             
         </div>
@@ -205,6 +200,44 @@ $google_info = new UserInfo($client, $sqld);
             var dateElement = document.getElementById("navDate");
             dateElement.innerText = new Intl.DateTimeFormat('en-CA', { dateStyle: 'full', timeStyle: 'long', timeZone: 'America/Edmonton' }).format(new Date().getTime());
         }, 1000);
+
+        setInterval(function() {
+
+            editor.save().then((data) => {
+                if (data.blocks.length == 0) {
+                    return
+                } else {
+                    $.ajax({
+                        url: 'auth/save.php',
+                        type: 'POST',
+                        data: {
+                            data: data
+                        },
+                        success: function(msg) {
+                            console.log('saved');
+                        }               
+                    });
+                }
+            })
+            .catch((error) => {
+                return; 
+            })
+        }, 5000);
+
+        setInterval(function() {
+            $.ajax({
+                        url: 'auth/heartbeat.php',
+                        type: 'POST',
+                        success: function(msg, status, xhr) {
+                            console.log(xhr);
+                            console.log('HB');
+                        },
+                        error: function(err) {
+                            console.log(err);
+                            window.location.replace("/auth/login.php");
+                        }       
+                    });
+        }, 5000)
 
         resizeListener();
     }
@@ -237,22 +270,4 @@ $google_info = new UserInfo($client, $sqld);
           document.getElementById("main").classList.toggle("mainHidden");
 
     }
-
-    // var quill = new Quill('#editor', {
-    //     // debug: 'info',
-    //     placeholder: 'Start Typing...',
-    //     scrollingContainer: '#editor',
-    //     theme: 'snow'
-    // });
   </script>
-
-
-<?php 
-
-      // echo 'We are running PHP, version: '. phpversion(); 
-
-
-
-
-
-        ?>

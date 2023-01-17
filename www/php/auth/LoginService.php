@@ -111,4 +111,17 @@ class LoginService extends \Google\Client{
         else return true;
     }
 
+    public function heartbeat() {
+        if (!isset($_SESSION['token']) || $this->isAccessTokenExpired()) {
+            session_destroy();
+            
+            http_response_code (302);
+            exit;
+        }
+        else {
+            http_response_code (200);
+            exit;
+        }
+    }
+
 }
