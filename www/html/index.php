@@ -62,6 +62,14 @@ $google_info = new UserInfo($client, $sqld);
     <!-- <script src="assets/vendor/quill/quill.core.js"></script> -->
 
     <script src='./assets/vendor/fullcalendar-6.0.2/dist/index.global.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/@editorjs/header@latest'></script>
+    <script src='https://cdn.jsdelivr.net/npm/@editorjs/simple-image@latest'></script>
+    <script src='https://cdn.jsdelivr.net/npm/@editorjs/checklist@latest'></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/embed@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/quote@latest"></script>
+
+
     <script src="./assets/js/editor.js"></script>
 
     <link rel="stylesheet" type="text/css" href="https://bootswatch.com/4/litera/bootstrap.min.css">
@@ -87,7 +95,43 @@ $google_info = new UserInfo($client, $sqld);
 
         calendar = calendarVar;
 
-        const editor = new EditorJS('editorjs');
+        const editor = new EditorJS({
+            holder: 'editorjs',
+            tools: {
+                header: {
+                    class: Header,
+                    inlineToolbar : true,
+                    shortcut: 'CMD+SHIFT+H'
+                },
+                image: SimpleImage,
+                checklist: {
+                    class: Checklist,
+                    inlineToolbar: true,
+                },
+                list: {
+                    class: List,
+                    inlineToolbar: true,
+                    config: {
+                        defaultStyle: 'unordered'
+                    }
+                },
+                embed: {
+                    class: Embed,
+                    inlineToolbar: true
+                },
+                quote: {
+                    class: Quote,
+                    inlineToolbar: true,
+                    shortcut: 'CMD+SHIFT+O',
+                    config: {
+                        quotePlaceholder: 'Enter a quote',
+                        captionPlaceholder: 'Quote\'s author',
+                    }
+                }
+            }
+
+
+        });
         console.log(editor);
 
 
