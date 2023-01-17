@@ -7,13 +7,17 @@ This is mainly a passion project to make a convenient day planner as an eventual
 ## How to install
 1. Install Docker and docker-compose
 
-2. Obtain a Google oauth2 client.json (https://support.google.com/cloud/answer/6158849?hl=en)
+2. Obtain a Google oauth2 client_secret_??????.json (https://developers.google.com/workspace/guides/create-credentials)
 
-3. Clone or fork repo, put file in **secrets** as **google_secret.txt** as per docker-compose.yml
+3. Clone repo
 
-4. Obtain SSL cert and modify nginx configuration to your certificate. 
+4. Rename client_secret_????.json to google_secret.txt
 
-5. You are now ready to run the containers
+5. Put google_secret.txt in the **secrets/** secrets directory as per the docker-compose.yml 
+
+6. Obtain SSL cert and modify nginx configuration in the nginx directory to your certificate. 
+
+7. Run the containers
 
 ## How to run
 Run `docker-compose up -d` to run containers detached in the background
