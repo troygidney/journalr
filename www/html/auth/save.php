@@ -7,9 +7,11 @@ require '/var/www/php/auth/SaveData.php';
 session_start();
 
 $client = new LoginService();
+$client->validate();
 
 
-$savedata = SaveData::init($_POST['data'], $client);
+$savedata = new SaveData($_POST['data'], $client);
+$savedata->saveData();
 
 
 

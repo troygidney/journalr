@@ -1,8 +1,6 @@
 <?php 
 
 require_once '/var/www/html/vendor/autoload.php';
-include "/var/www/php/UserInfo.php";
-include "/var/www/php/SQLDB.php";
 
 class SaveData {
 
@@ -12,30 +10,34 @@ class SaveData {
     private $client;
 
 
-    private function __construct() {
+    public function __construct($data, $client) {
         $this->sqldb = new SQLDB();
+
+        $this->setData($data);
+        $this->setClient($client);
     }
 
-    public static function noData() {
-        $obj = new SaveData();
-
-        return $obj;
-    }
-
-    public static function init($data, $client) {
-        $obj = new SaveData();
-        $obj->setData($data);
-        $obj->setClient($client);
-        return $obj;
-    }
-
-
-    private function saveData() {
+    public function saveData() {
         $dateVar = new DateTime();
         $date = $dateVar->format('Y-m-d');
 
+        $userinfo = new UserInfo($this->getClient());
+
+        $json = json_encode($this->getData());
+        $hash = hash("sha256", $userinfo->getID().$json['blocks']);
+
+        if (isset($_SESSION['datahash']) && $_SESSION['datahash'] == $hash) {
+            exit;
+        }
+
+        $_SESSION['datahash'] = $hash;
+        echo $userinfo->getID().$json;
         
 
+        // TODO Make database entry
+        // Add DataLoader
+        // Rename and refreactor to DataController
+        // Storage hash locally to reduce amount of http requests
     }
 
 
