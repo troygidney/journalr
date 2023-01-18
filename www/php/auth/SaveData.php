@@ -23,9 +23,9 @@ class SaveData {
 
         $userinfo = new UserInfo($this->getClient());
 
-        $json = json_encode($this->getData());
-
+        $json = json_encode($this->getData()); // Is there a better way to refrence json in php?
         $block = json_encode($this->getData()['blocks']);
+
         $id = $userinfo->getID();
 
         $hash = hash("sha256", $id.$block);
@@ -40,11 +40,15 @@ class SaveData {
         echo $userinfo->getID().$json;
 
         try {
-            $stmt = $this->sqldb->getCon()->query("INSERT INTO data.user_data (date, owner_id, data_refrence) VALUES (". (int)$date .",".  $id .",'". strval($hash) ."');");
+            $stmt = $this->sqldb->getCon()->query("
+            INSERT INTO data.user_data (date, owner_id, data_refrence) VALUES (". (int)$date .",".  $id .",'". $hash ."') ON DUPLICATE KEY UPDATE data_refrence='".$hash."';
+            ");
+
+            $stmt = $this->sqldb->getCon()->query("
+            INSERT INTO data.user_data_content (data_id, data_content) VALUES ('". $hash ."','". $json ."') ON DUPLICATE KEY UPDATE data_content='".$json."';
+            ");
         } catch (PDOException $e) {
-            if ($e->getCode() == 23000) {
-                // echo "User data exists.";
-            }
+
         }
         
 
