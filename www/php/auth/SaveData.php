@@ -24,7 +24,13 @@ class SaveData {
         $userinfo = new UserInfo($this->getClient());
 
         $json = json_encode($this->getData());
-        $hash = hash("sha256", $userinfo->getID().$this->getData()['blocks']);
+
+        $block = json_encode($this->getData()['blocks']);
+        $id = $userinfo->getID();
+
+        $hash = hash("sha256", $id.$block);
+
+        print_r($_SESSION['datahash']);
 
         if (isset($_SESSION['datahash']) && $_SESSION['datahash'] == $hash) {
             exit;
@@ -34,9 +40,8 @@ class SaveData {
         echo $userinfo->getID().$json;
 
         try {
-            $stmt = $this->sqldb->getCon()->query("INSERT INTO data.user_data (date, id, data_refrence) VALUES (". (int)$date .",".  $userinfo->getID() .",". $hash .")");
+            $stmt = $this->sqldb->getCon()->query("INSERT INTO data.user_data (date, owner_id, data_refrence) VALUES (". (int)$date .",".  $id .",'". strval($hash) ."');");
         } catch (PDOException $e) {
-            print_r($e);
             if ($e->getCode() == 23000) {
                 // echo "User data exists.";
             }
