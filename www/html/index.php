@@ -15,7 +15,7 @@ date_default_timezone_set("America/Edmonton");
 
 $sqldb = new SQLDB();
 
-$google_info = new UserInfo($client, $sqld);
+$google_info = new UserInfo($client);
 
 ?>
 
@@ -229,15 +229,12 @@ $google_info = new UserInfo($client, $sqld);
                         url: 'auth/heartbeat.php',
                         type: 'POST',
                         success: function(msg, status, xhr) {
-                            console.log(xhr);
-                            console.log('HB');
                         },
                         error: function(err) {
-                            console.log(err);
                             window.location.replace("/auth/login.php");
                         }       
                     });
-        }, 5000)
+        }, 60000)
 
         resizeListener();
     }
