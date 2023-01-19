@@ -2,24 +2,25 @@
 
 require_once '/var/www/html/vendor/autoload.php';
 
-class SaveData {
-
+class DataController {
     
     private $data;
     private $sqldb;
     private $client;
-
+    private $date;
 
     public function __construct($data, $client) {
         $this->sqldb = new SQLDB();
 
         $this->setData($data);
         $this->setClient($client);
+
+        $dateVar = new DateTime("America/Edmonton");
+        $this->date = $dateVar->format('Ymd');
     }
 
     public function saveData() {
-        $dateVar = new DateTime();
-        $date = $dateVar->format('Ymd');
+
 
         $userinfo = new UserInfo($this->getClient());
 
@@ -28,35 +29,58 @@ class SaveData {
 
         $id = $userinfo->getID();
 
-        $hash = hash("sha256", $id.$block);
+        $hash = hash("md5", $id.$block);
 
-        print_r($_SESSION['datahash']);
+        print_r ($hash);
 
         if (isset($_SESSION['datahash']) && $_SESSION['datahash'] == $hash) {
             exit;
         }
 
         $_SESSION['datahash'] = $hash;
-        echo $userinfo->getID().$json;
 
-        try {
+        try { // All of these need to be changed to prepared statements  
             $stmt = $this->sqldb->getCon()->query("
-            INSERT INTO data.user_data (date, owner_id, data_refrence) VALUES (". (int)$date .",".  $id .",'". $hash ."') ON DUPLICATE KEY UPDATE data_refrence='".$hash."';
+            INSERT INTO data.user_data (date, owner_id, data_refrence) VALUES (". $this->date .",".  $id .",'". $hash ."') ON DUPLICATE KEY UPDATE data_refrence='".$hash."';
             ");
 
             $stmt = $this->sqldb->getCon()->query("
             INSERT INTO data.user_data_content (data_id, data_content) VALUES ('". $hash ."','". $json ."') ON DUPLICATE KEY UPDATE data_content='".$json."';
             ");
-        } catch (PDOException $e) {
 
+            print_r($stmt);
+        } catch (PDOException $e) {
+            print_r ($e);
         }
         
 
         // TODO Make database entry
         // Add DataLoader
-        // Rename and refreactor to DataController
         // Storage hash locally to reduce amount of http requests
     }
+
+    // public function loadData() {
+    //     if ($this->getData != null) { // if data is not null, either it's a first load, or a refresh
+    //         echo "not null data";
+    //         return;
+    //     }
+
+    //     $ID = isset($_SESSION['ID']) ? $_SESSION['ID'] : null;
+
+
+    //     try {
+    //         $stmt = $this->sqldb->getCon()->query("
+    //         SELECT * FROM data.user_data WHERE (date, owner_id) VALUES (". $this->date .",".  $id .",'". $hash ."') ON DUPLICATE KEY UPDATE data_refrence='".$hash."';
+    //         ");
+
+    //     } catch (PDOException $e) {
+
+    //     }
+
+
+
+
+    // }
 
 
     public function getData() {

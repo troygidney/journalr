@@ -6,18 +6,17 @@ CREATE TABLE user_info (
 ) COMMENT '';
 
 CREATE TABLE user_data (  
-    date int UNIQUE,
-    owner_id VARCHAR(255) UNIQUE COMMENT "PAGE OWNER ID",
+    date int,
+    owner_id VARCHAR(255) COMMENT "PAGE OWNER ID",
     data_refrence VARCHAR(255) PRIMARY KEY, 
-    INDEX (owner_id),
-    FOREIGN KEY (owner_id) REFERENCES user_info (id)
+    UNIQUE INDEX (date, owner_id)
 );
 
 CREATE TABLE user_data_content (  
     data_id VARCHAR(255) UNIQUE COMMENT "PAGE ID",
     data_content LONGTEXT,
     INDEX (data_id),
-    FOREIGN KEY (data_id) REFERENCES user_data (data_refrence)
+    FOREIGN KEY (data_id) REFERENCES user_data (data_refrence) ON UPDATE CASCADE
 ) COMMENT '';
 
 

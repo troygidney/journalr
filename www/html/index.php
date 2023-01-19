@@ -201,7 +201,7 @@ $google_info = new UserInfo($client);
             dateElement.innerText = new Intl.DateTimeFormat('en-CA', { dateStyle: 'full', timeStyle: 'long', timeZone: 'America/Edmonton' }).format(new Date().getTime());
         }, 1000);
 
-        setInterval(function() {
+        setInterval(function() { //Increase save time, add saves to onchange
 
             editor.save().then((data) => {
                 if (data.blocks.length == 0) {
@@ -224,7 +224,7 @@ $google_info = new UserInfo($client);
             })
         }, 5000);
 
-        setInterval(function() {
+        setInterval(function() { 
             $.ajax({
                         url: 'auth/heartbeat.php',
                         type: 'POST',

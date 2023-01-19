@@ -58,6 +58,7 @@ class LoginService extends \Google\Client{
             // $result = $stmt->execute([$id, time()]);
 
             Header("Location: /");
+            exit;
         } else if (!isset($_SESSION['token'])) { // If user is not logged in
             echo "<a href='".$this->createAuthUrl()."'>login with Google</a>" ;
 
@@ -79,6 +80,7 @@ class LoginService extends \Google\Client{
             }
 
             Header("Location: /");
+            exit;
         }
     }
 
