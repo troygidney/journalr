@@ -73,8 +73,11 @@ $google_info = new UserInfo($client);
 
 
     <script src="./assets/js/editor.js"></script>
+    <script src="./assets/js/date.js"></script>
 
     <link rel="stylesheet" type="text/css" href="https://bootswatch.com/4/litera/bootstrap.min.css">
+
+    <!-- TODO Move JS to own file -->
 
     <script>
 
@@ -98,45 +101,70 @@ $google_info = new UserInfo($client);
 
         calendar = calendarVar;
 
-        const editorVar = new EditorJS({
-            holder: 'editorjs',
-            tools: {
-                header: {
-                    class: Header,
-                    inlineToolbar : true,
-                    shortcut: 'CMD+SHIFT+H'
-                },
-                image: SimpleImage,
-                checklist: {
-                    class: Checklist,
-                    inlineToolbar: true,
-                },
-                list: {
-                    class: List,
-                    inlineToolbar: true,
-                    config: {
-                        defaultStyle: 'unordered'
-                    }
-                },
-                embed: {
-                    class: Embed,
-                    inlineToolbar: true
-                },
-                quote: {
-                    class: Quote,
-                    inlineToolbar: true,
-                    shortcut: 'CMD+SHIFT+O',
-                    config: {
-                        quotePlaceholder: 'Enter a quote',
-                        captionPlaceholder: 'Quote\'s author',
-                    }
-                }
-            }
+ 
+
+        
+        let date = new Date().toString("yyyyMMdd");
+        console.log(date);
+        $.ajax({
+                        url: 'auth/load.php',
+                        type: 'POST',
+                        data: {
+                            date: date
+                        },
+                        success: function(msg, status, xhr) {
+                            // let content = JSON.parse(msg.data_content)
+                            // console.log(content);
 
 
+                            let encoded = msg != "" ? JSON.parse(msg) : null;
+                            const editorVar = new EditorJS({
+                                holder: 'editorjs',
+                                data: encoded,
+                                tools: {
+                                    header: {
+                                        class: Header,
+                                        inlineToolbar : true,
+                                        shortcut: 'CMD+SHIFT+H'
+                                    },
+                                    image: SimpleImage,
+                                    checklist: {
+                                        class: Checklist,
+                                        inlineToolbar: true,
+                                    },
+                                    list: {
+                                        class: List,
+                                        inlineToolbar: true,
+                                        config: {
+                                            defaultStyle: 'unordered'
+                                        }
+                                    },
+                                    embed: {
+                                        class: Embed,
+                                        inlineToolbar: true
+                                    },
+                                    quote: {
+                                        class: Quote,
+                                        inlineToolbar: true,
+                                        shortcut: 'CMD+SHIFT+O',
+                                        config: {
+                                            quotePlaceholder: 'Enter a quote',
+                                            captionPlaceholder: 'Quote\'s author',
+                                        }
+                                    }
+                                }
+                            });
+                        editor = editorVar;
+                        },
+                        error: function(err) {
+                            console.log(err);
+                        }       
         });
+        
 
-        editor = editorVar;
+
+
+
 
         });
     </script>

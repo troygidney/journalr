@@ -59,28 +59,40 @@ class DataController {
         // Storage hash locally to reduce amount of http requests
     }
 
-    // public function loadData() {
-    //     if ($this->getData != null) { // if data is not null, either it's a first load, or a refresh
-    //         echo "not null data";
-    //         return;
-    //     }
+    public function loadData() {
+        if ($this->getData != null) { // if data is not null, either it's a first load, or a refresh
+            echo "not null data";
+            return;
+        }
 
-    //     $ID = isset($_SESSION['ID']) ? $_SESSION['ID'] : null;
+        $userinfo = new UserInfo($this->getClient());
+        $id = $userinfo->getID();
+
+        $date = isset($_POST['date']) ? $_POST['date'] : $this->date;
+
+        try {
+            $stmt = $this->sqldb->getCon()->query("
+            SELECT user_data_content.data_content 
+            FROM data.user_data
+            LEFT JOIN data.user_data_content
+            ON data.user_data.data_refrence = data.user_data_content.data_id
+            WHERE date=". $date ." AND owner_id=". $id ." ;
+            ");
+
+            foreach ($stmt as $row) { //TODO Add selection of multi days
+                foreach($row as $index) {
+                    print_r ($index);
+                }
+            }
+
+        } catch (PDOException $e) {
+            print_r($e);
+        }
 
 
-    //     try {
-    //         $stmt = $this->sqldb->getCon()->query("
-    //         SELECT * FROM data.user_data WHERE (date, owner_id) VALUES (". $this->date .",".  $id .",'". $hash ."') ON DUPLICATE KEY UPDATE data_refrence='".$hash."';
-    //         ");
-
-    //     } catch (PDOException $e) {
-
-    //     }
 
 
-
-
-    // }
+    }
 
 
     public function getData() {
