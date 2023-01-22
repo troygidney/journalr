@@ -18,7 +18,7 @@
     },
     "scripts": {
         "pre-install-cmd": [
-          "Composer\\Config::disableProcessTimeout"
+            "Composer\\Config::disableProcessTimeout"
         ]
-      }
+    }
 }

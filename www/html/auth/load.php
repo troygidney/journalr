@@ -16,12 +16,3 @@ $client->validate();
 
 $savedata = new DataController(null, $client);
 $savedata->loadData();
-
-
-
-
-
-
-
-
-?>

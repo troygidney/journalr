@@ -5,14 +5,16 @@ require_once '/var/www/html/vendor/autoload.php';
 include "/var/www/php/UserInfo.php";
 include "/var/www/php/SQLDB.php";
 
-class LoginService extends \Google\Client{
+class LoginService extends \Google\Client
+{
 
-     private $FILEPATH = "/run/secrets/google_secret";
+    private $FILEPATH = "/run/secrets/google_secret";
 
-    public function __construct() {
+    public function __construct()
+    {
 
         $this->setKey($this->getKey()); //Get secret
-        
+
         parent::__construct(); // Construct Google Client before
 
         $k = json_decode($this->getKey(), true); //Format for auth config
@@ -26,15 +28,15 @@ class LoginService extends \Google\Client{
         $this->addScope('email');
         $this->addScope(Google\Service\Calendar::CALENDAR);
 
-        
+
         if (isset($_SESSION['token'])) { // If the session token is set, add token to google client
             $this->setAccessToken($_SESSION['token']);
         }
-
     }
-    
 
-    public function login() { // Login the user
+
+    public function login()
+    { // Login the user
         if (isset($_GET['code']) && !isset($_SESSION['token'])) { // If a user gets google access token
             $token = $this->fetchAccessTokenWithAuthCode($_GET['code']); // Fetch access token from auth code in $_GET['code'] supplied from google
             $this->setAccessToken($token); //Set access token for google client
@@ -48,8 +50,7 @@ class LoginService extends \Google\Client{
             $_SESSION['id'] = $id;
 
             try { // This currently will always try to insert the user id, after one seccessful insert the primary key restriction fails all other inserts
-                $stmt = $db->getCon()->query("INSERT INTO data.user_info (id,create_time) VALUES (". $id .",".  time() .")");
-
+                $stmt = $db->getCon()->query("INSERT INTO data.user_info (id,create_time) VALUES (" . $id . "," .  time() . ")");
             } catch (PDOException $e) {
                 if ($e->getCode() == 23000) {
                     // echo "User data exists.";
@@ -60,9 +61,7 @@ class LoginService extends \Google\Client{
             Header("Location: /");
             exit;
         } else if (!isset($_SESSION['token'])) { // If user is not logged in
-            echo "<a href='".$this->createAuthUrl()."'>login with Google</a>" ;
-
-
+            echo "<a href='" . $this->createAuthUrl() . "'>login with Google</a>";
         } else if ($this->validate()) { // If a user navigates to login.php
             // echo "Logged in<br>";
 
@@ -72,7 +71,7 @@ class LoginService extends \Google\Client{
             $id = $userinfo->getID();
 
             try {
-                $stmt = $db->getCon()->query("INSERT INTO data.user_info (id,create_time) VALUES (". $id .",".  time() .")");
+                $stmt = $db->getCon()->query("INSERT INTO data.user_info (id,create_time) VALUES (" . $id . "," .  time() . ")");
             } catch (PDOException $e) {
                 if ($e->getCode() == 23000) {
                     // echo "User data exists.";
@@ -84,26 +83,29 @@ class LoginService extends \Google\Client{
         }
     }
 
-    private function getKey() {
+    private function getKey()
+    {
         // if (isset($this->clientSecret)) return $this->clientSecret;
-        
+
         // $clientSecret = fopen(self::FILEPATH, "r", true) or die("Server Config Error!");
 
         $file = fopen($this->FILEPATH, "r", true) or die("Server Config Error!");
-        $clientSecret = fread($file,filesize("/run/secrets/google_secret"));
+        $clientSecret = fread($file, filesize("/run/secrets/google_secret"));
         fclose($file);
-        
+
         return $clientSecret;
     }
 
-    public function setKey($key) {
+    public function setKey($key)
+    {
         $this->setClientSecret($key);
     }
 
-    public function validate() {
+    public function validate()
+    {
         if (!isset($_SESSION['token']) || $this->isAccessTokenExpired()) {
             session_destroy();
-            
+
             Header("Location: /auth/login.php");
         }
         //     echo 
@@ -113,17 +115,16 @@ class LoginService extends \Google\Client{
         else return true;
     }
 
-    public function heartbeat() {
+    public function heartbeat()
+    {
         if (!isset($_SESSION['token']) || $this->isAccessTokenExpired()) {
             session_destroy();
-            
-            http_response_code (302);
+
+            http_response_code(302);
             exit;
-        }
-        else {
-            http_response_code (200);
+        } else {
+            http_response_code(200);
             exit;
         }
     }
-
 }
