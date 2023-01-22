@@ -53,10 +53,6 @@ class DataController {
             print_r ($e);
         }
         
-
-        // TODO Make database entry
-        // Add DataLoader
-        // Storage hash locally to reduce amount of http requests
     }
 
     public function loadData() {

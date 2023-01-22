@@ -85,10 +85,6 @@ class LoginService extends \Google\Client{
     }
 
     private function getKey() {
-        // if (isset($this->clientSecret)) return $this->clientSecret;
-        
-        // $clientSecret = fopen(self::FILEPATH, "r", true) or die("Server Config Error!");
-
         $file = fopen($this->FILEPATH, "r", true) or die("Server Config Error!");
         $clientSecret = fread($file,filesize("/run/secrets/google_secret"));
         fclose($file);
@@ -105,11 +101,8 @@ class LoginService extends \Google\Client{
             session_destroy();
             
             Header("Location: /auth/login.php");
+            exit;
         }
-        //     echo 
-        // "<script type='text/javascript'>
-        // window.location.href = 'http://localhost/auth/login.php';
-        // </script>";}
         else return true;
     }
 
