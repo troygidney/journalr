@@ -7,5 +7,3 @@ session_start();
 
 $client = new LoginService();
 $client->heartbeat();
-
-?>

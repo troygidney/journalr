@@ -16,8 +16,3 @@ $client->validate();
 
 $savedata = new DataController($_POST['data'], $client);
 $savedata->saveData();
-
-
-
-
-?>

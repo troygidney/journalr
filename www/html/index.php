@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once '/var/www/html/vendor/autoload.php';
 require '/var/www/php/auth/LoginService.php';
 require_once '/var/www/php/UserInfo.php';
@@ -23,31 +23,31 @@ $google_info = new UserInfo($client);
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Journalr</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
-  <meta name="metro4:init" content="true">
+    <title>Journalr</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <meta name="metro4:init" content="true">
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
 
-  <!-- Vendor CSS Files -->
-  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <!-- Vendor CSS Files -->
+    <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
-  <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
 
-  <!-- <script type="text/javascript" src="config.js"></script> -->
+    <!-- <script type="text/javascript" src="config.js"></script> -->
 
     <!-- Main Quill library -->
     <script src="assets/vendor/quill/quill.js"></script>
@@ -80,88 +80,89 @@ $google_info = new UserInfo($client);
     <!-- TODO Move JS to own file -->
 
     <script>
-
         var calendar;
         var editor;
 
         document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
+            var calendarEl = document.getElementById('calendar');
 
-        var calendarVar = new FullCalendar.Calendar(calendarEl, {
-            timeZone: 'MTC',
-            initialView: 'dayGridMonth',
-            editable: true,
-            selectable: true,
-            // height: (document.getElementById("sidebarWrapper").offsetHeight),
-            contentHeight:"auto",
-            headerToolbar: { center: 'dayGridMonth,timeGridWeek' }, // buttons for switching between views
-        });
-        
-        calendarVar.render(); //Init render for calendar
+            var calendarVar = new FullCalendar.Calendar(calendarEl, {
+                timeZone: 'MTC',
+                initialView: 'dayGridMonth',
+                editable: true,
+                selectable: true,
+                // height: (document.getElementById("sidebarWrapper").offsetHeight),
+                contentHeight: "auto",
+                headerToolbar: {
+                    center: 'dayGridMonth,timeGridWeek'
+                }, // buttons for switching between views
+            });
 
-        calendar = calendarVar;
+            calendarVar.render(); //Init render for calendar
 
- 
-
-        
-        let date = new Date().toString("yyyyMMdd");
-        console.log(date);
-        $.ajax({
-                        url: 'auth/load.php',
-                        type: 'POST',
-                        data: {
-                            date: date
-                        },
-                        success: function(msg, status, xhr) {
-                            // let content = JSON.parse(msg.data_content)
-                            // console.log(content);
+            calendar = calendarVar;
 
 
-                            let encoded = msg != "" ? JSON.parse(msg) : null;
-                            const editorVar = new EditorJS({
-                                holder: 'editorjs',
-                                data: encoded,
-                                logLevel: 'ERROR',
-                                tools: {
-                                    header: {
-                                        class: Header,
-                                        inlineToolbar : true,
-                                        shortcut: 'CMD+SHIFT+H'
-                                    },
-                                    image: SimpleImage,
-                                    checklist: {
-                                        class: Checklist,
-                                        inlineToolbar: true,
-                                    },
-                                    list: {
-                                        class: List,
-                                        inlineToolbar: true,
-                                        config: {
-                                            defaultStyle: 'unordered'
-                                        }
-                                    },
-                                    embed: {
-                                        class: Embed,
-                                        inlineToolbar: true
-                                    },
-                                    quote: {
-                                        class: Quote,
-                                        inlineToolbar: true,
-                                        shortcut: 'CMD+SHIFT+O',
-                                        config: {
-                                            quotePlaceholder: 'Enter a quote',
-                                            captionPlaceholder: 'Quote\'s author',
-                                        }
-                                    }
+
+
+            let date = new Date().toString("yyyyMMdd");
+            console.log(date);
+            $.ajax({
+                url: 'auth/load.php',
+                type: 'POST',
+                data: {
+                    date: date
+                },
+                success: function(msg, status, xhr) {
+                    // let content = JSON.parse(msg.data_content)
+                    // console.log(content);
+
+
+                    let encoded = msg != "" ? JSON.parse(msg) : null;
+                    const editorVar = new EditorJS({
+                        holder: 'editorjs',
+                        data: encoded,
+                        logLevel: 'ERROR',
+                        tools: {
+                            header: {
+                                class: Header,
+                                inlineToolbar: true,
+                                shortcut: 'CMD+SHIFT+H'
+                            },
+                            image: SimpleImage,
+                            checklist: {
+                                class: Checklist,
+                                inlineToolbar: true,
+                            },
+                            list: {
+                                class: List,
+                                inlineToolbar: true,
+                                config: {
+                                    defaultStyle: 'unordered'
                                 }
-                            });
-                        editor = editorVar;
-                        },
-                        error: function(err) {
-                            console.log(err);
-                        }       
-        });
-        
+                            },
+                            embed: {
+                                class: Embed,
+                                inlineToolbar: true
+                            },
+                            quote: {
+                                class: Quote,
+                                inlineToolbar: true,
+                                shortcut: 'CMD+SHIFT+O',
+                                config: {
+                                    quotePlaceholder: 'Enter a quote',
+                                    captionPlaceholder: 'Quote\'s author',
+                                }
+                            }
+                        }
+                    });
+                    editor = editorVar;
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+
 
 
 
@@ -175,120 +176,122 @@ $google_info = new UserInfo($client);
 <body onload="load(this)">
 
 
-<div class="wrapper">
+    <div class="wrapper">
 
-    <div class="nav" style="z-index: 10;">
-         <div class="navWrapper">
-            <div id="navHamburger" class="navHamburger" onclick="navToggle(this)">
-                <div class="bar1"></div>
-                <div class="bar2"></div>
-                <div class="bar3"></div>            
-            </div>
-            
-            <div>
-               <div>
-                    <div class="navDate">
-                         Hello <?php echo $google_info->getName()?>, it is currently...
+        <div class="nav" style="z-index: 10;">
+            <div class="navWrapper">
+                <div id="navHamburger" class="navHamburger" onclick="navToggle(this)">
+                    <div class="bar1"></div>
+                    <div class="bar2"></div>
+                    <div class="bar3"></div>
+                </div>
+
+                <div>
+                    <div>
+                        <div class="navDate">
+                            Hello <?php echo $google_info->getName() ?>, it is currently...
+                        </div>
+                        <div id="navDate" class="navDate">
+                        </div>
                     </div>
-                    <div id="navDate" class="navDate">
-                     </div>
-               </div>
+                </div>
+
+                <a class="navAccount" onclick="calendar.render()"><img class="navAccountImg" src="<?php echo $google_info->getPicture() ?>" referrerpolicy="no-referrer"></a>
             </div>
-            
-            <a class="navAccount" onclick="calendar.render()" ><img class="navAccountImg" src="<?php echo $google_info->getPicture() ?>" referrerpolicy="no-referrer"></a>
         </div>
-    </div>
 
-    <div id="sidebar" class="sideBar sideBarHidden">
-        <div id="sidebarWrapper" class="sideBarWrapper">
-            
-            <div id="calendar" class="calendarWrapper  fc fc-ltr fc-bootstrap4">
-                
+        <div id="sidebar" class="sideBar sideBarHidden">
+            <div id="sidebarWrapper" class="sideBarWrapper">
+
+                <div id="calendar" class="calendarWrapper  fc fc-ltr fc-bootstrap4">
+
+                </div>
+
+
             </div>
-
-
         </div>
-    </div>
-    <div id="main" class="main" >
-        <div class="mainWrapper">
-            <div class="editor" style="background-color: white;" id="editorjs">
+        <div id="main" class="main">
+            <div class="mainWrapper">
+                <div class="editor" style="background-color: white;" id="editorjs">
+                </div>
+
             </div>
-            
         </div>
-    </div>
 
-</div>
+    </div>
 
 </body>
 
-  <script>
-
-    function load(x) { 
+<script>
+    function load(x) {
 
         let remoteHash;
         let localHash;
 
         setInterval(function() {
             var dateElement = document.getElementById("navDate");
-            dateElement.innerText = new Intl.DateTimeFormat('en-CA', { dateStyle: 'full', timeStyle: 'long', timeZone: 'America/Edmonton' }).format(new Date().getTime());
+            dateElement.innerText = new Intl.DateTimeFormat('en-CA', {
+                dateStyle: 'full',
+                timeStyle: 'long',
+                timeZone: 'America/Edmonton'
+            }).format(new Date().getTime());
         }, 1000);
 
         setInterval(function() { //Increase save time, add saves to onchange
 
             editor.save().then((data) => {
-                if (data.blocks.length == 0) {
-                    return
-                } else {
-                    localHash = sha256(JSON.stringify(data.blocks));
+                    if (data.blocks.length == 0) {
+                        return
+                    } else {
+                        localHash = sha256(JSON.stringify(data.blocks));
 
-                    localHash.then((hash) => {
-                        if (hash == remoteHash) return;
+                        localHash.then((hash) => {
+                            if (hash == remoteHash) return;
 
-                        $.ajax({
-                            url: 'auth/save.php',
-                            type: 'POST',
-                            data: {
-                                data: data
-                            },
-                            success: function(msg) {
-                                remoteHash = msg;
-                            }               
-                        });
-                    })
-                }
-            })
-            .catch((error) => {
-                return; 
-            })
+                            $.ajax({
+                                url: 'auth/save.php',
+                                type: 'POST',
+                                data: {
+                                    data: data
+                                },
+                                success: function(msg) {
+                                    remoteHash = msg;
+                                }
+                            });
+                        })
+                    }
+                })
+                .catch((error) => {
+                    return;
+                })
         }, 3000);
 
-        setInterval(function() { 
+        setInterval(function() {
             $.ajax({
-                        url: 'auth/heartbeat.php',
-                        type: 'POST',
-                        success: function(msg, status, xhr) {
-                        },
-                        error: function(err) {
-                            window.location.replace("/auth/login.php");
-                        }       
-                    });
+                url: 'auth/heartbeat.php',
+                type: 'POST',
+                success: function(msg, status, xhr) {},
+                error: function(err) {
+                    window.location.replace("/auth/login.php");
+                }
+            });
         }, 60000)
 
         resizeListener();
     }
 
     function resizeListener() {
-     window.addEventListener("resize", (event) => {
-          if (window.innerWidth <= 796 && document.getElementById("sidebar").classList.contains("sideBarChange")) {
-               document.getElementById("main").classList.add("mainHidden");
-               navToggle(document.getElementById("navHamburger"));
-          } else {
-            document.getElementById("main").classList.remove("mainHidden");
-          }
-          console.log(window.innerWidth);
-     });
+        window.addEventListener("resize", (event) => {
+            if (window.innerWidth <= 796 && document.getElementById("sidebar").classList.contains("sideBarChange")) {
+                document.getElementById("main").classList.add("mainHidden");
+                navToggle(document.getElementById("navHamburger"));
+            } else {
+                document.getElementById("main").classList.remove("mainHidden");
+            }
+            console.log(window.innerWidth);
+        });
     }
-    
+
     function navToggle(element) {
         element.classList.toggle("change");
         document.getElementById("sidebar").classList.toggle("sideBarChange");
@@ -298,27 +301,26 @@ $google_info = new UserInfo($client);
         setTimeout(function() {
             document.getElementById("calendar").style.visability = "visible";
             console.log("render!");
-                calendar.updateSize();
-            }, 400); 
+            calendar.updateSize();
+        }, 400);
 
         if (window.innerWidth <= 796)
-          document.getElementById("main").classList.toggle("mainHidden");
+            document.getElementById("main").classList.toggle("mainHidden");
 
     }
 
     async function sha256(message) {
-    // encode as UTF-8
-    const msgBuffer = new TextEncoder().encode(message);                    
+        // encode as UTF-8
+        const msgBuffer = new TextEncoder().encode(message);
 
-    // hash the message
-    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        // hash the message
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
 
-    // convert ArrayBuffer to Array
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
+        // convert ArrayBuffer to Array
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
 
-    // convert bytes to hex string                  
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return hashHex;
-}
-
-  </script>
+        // convert bytes to hex string                  
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        return hashHex;
+    }
+</script>
