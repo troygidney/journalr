@@ -224,6 +224,8 @@ $google_info = new UserInfo($client);
 
     function load(x) { 
 
+        let hash;
+
         setInterval(function() {
             var dateElement = document.getElementById("navDate");
             dateElement.innerText = new Intl.DateTimeFormat('en-CA', { dateStyle: 'full', timeStyle: 'long', timeZone: 'America/Edmonton' }).format(new Date().getTime());
@@ -235,6 +237,8 @@ $google_info = new UserInfo($client);
                 if (data.blocks.length == 0) {
                     return
                 } else {
+
+
                     $.ajax({
                         url: 'auth/save.php',
                         type: 'POST',
@@ -242,7 +246,11 @@ $google_info = new UserInfo($client);
                             data: data
                         },
                         success: function(msg) {
-                            console.log('saved');
+                            console.log(msg);
+                            console.log(hash);
+
+                    hash = btoa(JSON.stringify(data.blocks));
+
                         }               
                     });
                 }
