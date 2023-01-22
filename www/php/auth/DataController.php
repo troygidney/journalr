@@ -29,7 +29,7 @@ class DataController {
 
         $id = $userinfo->getID();
 
-        $hash = base64_encode($block);
+        $hash = hash("sha256", $block);
 
         print_r ($hash);
 
