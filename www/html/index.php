@@ -121,6 +121,7 @@ $google_info = new UserInfo($client);
                             const editorVar = new EditorJS({
                                 holder: 'editorjs',
                                 data: encoded,
+                                logLevel: 'ERROR',
                                 tools: {
                                     header: {
                                         class: Header,
@@ -224,7 +225,8 @@ $google_info = new UserInfo($client);
 
     function load(x) { 
 
-        let hash;
+        let remoteHash;
+        let localHash;
 
         setInterval(function() {
             var dateElement = document.getElementById("navDate");
@@ -237,28 +239,28 @@ $google_info = new UserInfo($client);
                 if (data.blocks.length == 0) {
                     return
                 } else {
+                    localHash = sha256(JSON.stringify(data.blocks));
 
+                    localHash.then((hash) => {
+                        if (hash == remoteHash) return;
 
-                    $.ajax({
-                        url: 'auth/save.php',
-                        type: 'POST',
-                        data: {
-                            data: data
-                        },
-                        success: function(msg) {
-                            console.log(msg);
-                            console.log(hash);
-
-                    hash = btoa(JSON.stringify(data.blocks));
-
-                        }               
-                    });
+                        $.ajax({
+                            url: 'auth/save.php',
+                            type: 'POST',
+                            data: {
+                                data: data
+                            },
+                            success: function(msg) {
+                                remoteHash = msg;
+                            }               
+                        });
+                    })
                 }
             })
             .catch((error) => {
                 return; 
             })
-        }, 5000);
+        }, 3000);
 
         setInterval(function() { 
             $.ajax({
@@ -303,4 +305,20 @@ $google_info = new UserInfo($client);
           document.getElementById("main").classList.toggle("mainHidden");
 
     }
+
+    async function sha256(message) {
+    // encode as UTF-8
+    const msgBuffer = new TextEncoder().encode(message);                    
+
+    // hash the message
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+
+    // convert ArrayBuffer to Array
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+
+    // convert bytes to hex string                  
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex;
+}
+
   </script>
