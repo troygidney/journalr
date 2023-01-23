@@ -47,20 +47,6 @@ $google_info = new UserInfo($client);
 
     <link href="assets/css/style.css" rel="stylesheet">
 
-    <!-- <script type="text/javascript" src="config.js"></script> -->
-
-    <!-- Main Quill library -->
-    <script src="assets/vendor/quill/quill.js"></script>
-    <script src="assets/vendor/quill/quill.min.js"></script>
-
-    <!-- Theme included stylesheets -->
-    <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
-    <!-- <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet"> -->
-
-    <!-- Core build with no theme, formatting, non-essential modules -->
-    <!-- <link href="assets/vendor/quill/quill.core.css" rel="stylesheet"> -->
-    <!-- <script src="assets/vendor/quill/quill.core.js"></script> -->
-
     <script src='./assets/vendor/fullcalendar-6.0.2/dist/index.global.js'></script>
     <script src='https://cdn.jsdelivr.net/npm/@editorjs/header@latest'></script>
     <script src='https://cdn.jsdelivr.net/npm/@editorjs/simple-image@latest'></script>
@@ -74,106 +60,21 @@ $google_info = new UserInfo($client);
 
     <script src="./assets/js/editor.js"></script>
     <script src="./assets/js/date.js"></script>
+    <script src="./assets/js/main.js"></script>
 
     <link rel="stylesheet" type="text/css" href="https://bootswatch.com/4/litera/bootstrap.min.css">
 
-    <!-- TODO Move JS to own file -->
-
     <script>
-        var calendar;
-        var editor;
+    
+    let editor;
+    let calendar;
 
-        document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('calendar');
-
-            var calendarVar = new FullCalendar.Calendar(calendarEl, {
-                timeZone: 'MTC',
-                initialView: 'dayGridMonth',
-                editable: true,
-                selectable: true,
-                // height: (document.getElementById("sidebarWrapper").offsetHeight),
-                contentHeight: "auto",
-                headerToolbar: {
-                    center: 'dayGridMonth,timeGridWeek'
-                }, // buttons for switching between views
-            });
-
-            calendarVar.render(); //Init render for calendar
-
-            calendar = calendarVar;
-
-
-
-
-            let date = new Date().toString("yyyyMMdd");
-            console.log(date);
-            $.ajax({
-                url: 'auth/load.php',
-                type: 'POST',
-                data: {
-                    date: date
-                },
-                success: function(msg, status, xhr) {
-                    // let content = JSON.parse(msg.data_content)
-                    // console.log(content);
-
-
-                    let encoded = msg != "" ? JSON.parse(msg) : null;
-                    const editorVar = new EditorJS({
-                        holder: 'editorjs',
-                        data: encoded,
-                        logLevel: 'ERROR',
-                        tools: {
-                            header: {
-                                class: Header,
-                                inlineToolbar: true,
-                                shortcut: 'CMD+SHIFT+H'
-                            },
-                            image: SimpleImage,
-                            checklist: {
-                                class: Checklist,
-                                inlineToolbar: true,
-                            },
-                            list: {
-                                class: List,
-                                inlineToolbar: true,
-                                config: {
-                                    defaultStyle: 'unordered'
-                                }
-                            },
-                            embed: {
-                                class: Embed,
-                                inlineToolbar: true
-                            },
-                            quote: {
-                                class: Quote,
-                                inlineToolbar: true,
-                                shortcut: 'CMD+SHIFT+O',
-                                config: {
-                                    quotePlaceholder: 'Enter a quote',
-                                    captionPlaceholder: 'Quote\'s author',
-                                }
-                            }
-                        }
-                    });
-                    editor = editorVar;
-                },
-                error: function(err) {
-                    console.log(err);
-                }
-            });
-
-
-
-
-
-
-        });
+    
     </script>
 
 </head>
 
-<body onload="load(this)">
+<body onload="load().then((x) => {editor = x[0];calendar = x[1];});">
 
 
     <div class="wrapper">
@@ -221,106 +122,3 @@ $google_info = new UserInfo($client);
     </div>
 
 </body>
-
-<script>
-    function load(x) {
-
-        let remoteHash;
-        let localHash;
-
-        setInterval(function() {
-            var dateElement = document.getElementById("navDate");
-            dateElement.innerText = new Intl.DateTimeFormat('en-CA', {
-                dateStyle: 'full',
-                timeStyle: 'long',
-                timeZone: 'America/Edmonton'
-            }).format(new Date().getTime());
-        }, 1000);
-
-        setInterval(function() { //Increase save time, add saves to onchange
-
-            editor.save().then((data) => {
-                    if (data.blocks.length == 0) {
-                        return
-                    } else {
-                        localHash = sha256(JSON.stringify(data.blocks));
-
-                        localHash.then((hash) => {
-                            if (hash == remoteHash) return;
-
-                            $.ajax({
-                                url: 'auth/save.php',
-                                type: 'POST',
-                                data: {
-                                    data: data
-                                },
-                                success: function(msg) {
-                                    remoteHash = msg;
-                                }
-                            });
-                        })
-                    }
-                })
-                .catch((error) => {
-                    return;
-                })
-        }, 3000);
-
-        setInterval(function() {
-            $.ajax({
-                url: 'auth/heartbeat.php',
-                type: 'POST',
-                success: function(msg, status, xhr) {},
-                error: function(err) {
-                    window.location.replace("/auth/login.php");
-                }
-            });
-        }, 60000)
-
-        resizeListener();
-    }
-
-    function resizeListener() {
-        window.addEventListener("resize", (event) => {
-            if (window.innerWidth <= 796 && document.getElementById("sidebar").classList.contains("sideBarChange")) {
-                document.getElementById("main").classList.add("mainHidden");
-                navToggle(document.getElementById("navHamburger"));
-            } else {
-                document.getElementById("main").classList.remove("mainHidden");
-            }
-            console.log(window.innerWidth);
-        });
-    }
-
-    function navToggle(element) {
-        element.classList.toggle("change");
-        document.getElementById("sidebar").classList.toggle("sideBarChange");
-        document.getElementById("sidebar").classList.toggle("sideBarHidden");
-
-        document.getElementById("calendar").style.visability = "hidden";
-        setTimeout(function() {
-            document.getElementById("calendar").style.visability = "visible";
-            console.log("render!");
-            calendar.updateSize();
-        }, 400);
-
-        if (window.innerWidth <= 796)
-            document.getElementById("main").classList.toggle("mainHidden");
-
-    }
-
-    async function sha256(message) {
-        // encode as UTF-8
-        const msgBuffer = new TextEncoder().encode(message);
-
-        // hash the message
-        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-
-        // convert ArrayBuffer to Array
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-
-        // convert bytes to hex string                  
-        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        return hashHex;
-    }
-</script>
