@@ -27,14 +27,14 @@ class DataController
 
         $userinfo = new UserInfo($this->getClient());
 
-        $json = json_encode($this->getData()); // Is there a better way to refrence json in php?
+        $json = base64_decode($this->getData()); // Is there a better way to refrence json in php?
         $block = json_encode($this->getData()['blocks']);
 
         $id = $userinfo->getID();
 
         $hash = hash("sha256", $block);
 
-        print_r($hash);
+        print_r($json);
 
         if (isset($_SESSION['datahash']) && $_SESSION['datahash'] == $hash) {
             exit;
@@ -81,7 +81,7 @@ class DataController
 
             foreach ($stmt as $row) { //TODO Add selection of multi days
                 foreach ($row as $index) {
-                    print_r($index);
+                    print_r($atob($index));
                 }
             }
         } catch (PDOException $e) {

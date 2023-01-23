@@ -17,8 +17,6 @@ async function load() {
     });
 
     calendarVar.render(); //Init render for calendar
-    calendar = calendarVar;
-
 
     const editorVar = await new EditorJS({
         holder: 'editorjs',
@@ -57,25 +55,24 @@ async function load() {
         }
     });
 
-    let date = new Date().toString("yyyyMMdd");
-    console.log(date);
-    $.ajax({
-        url: 'auth/load.php',
-        type: 'POST',
-        data: {
-            date: date
-        },
-        success: function(msg, status, xhr) {
-            let encoded = msg != "" ? JSON.parse(msg) : null;
+    // Temp disabling load function to sort saving  
+    // let date = new Date().toString("yyyyMMdd");
+    // $.ajax({
+    //     url: 'auth/load.php',
+    //     type: 'POST',
+    //     data: {
+    //         date: date
+    //     },
+    //     success: function(msg, status, xhr) {
+    //         console.log(msg);
+    //         let encoded = msg != "" ? JSON.parse(msg) : null;
 
-            editorVar.render(encoded);
-        },
-        error: function(err) {
-            console.log(err);
-        }
-    });
-
-    console.log("loaded");
+    //         editorVar.render(encoded);
+    //     },
+    //     error: function(err) {
+    //         console.log(err);
+    //     }
+    // });
 
 
 
@@ -102,14 +99,19 @@ async function load() {
                     localHash.then((hash) => {
                         if (hash == remoteHash) return;
 
+
+
                         $.ajax({
                             url: 'auth/save.php',
                             type: 'POST',
                             data: {
-                                data: data
+                                data: btoa(data)
                             },
                             success: function(msg) {
                                 remoteHash = msg;
+
+                                console.log(hash + "<br>" + JSON.stringify(data.blocks));
+                                console.log(remoteHash);
                             }
                         });
                     })
@@ -138,7 +140,7 @@ async function load() {
 }
 
 
-function resizeListener() {
+function resizeListener() { // TODO Make this more dynamic
     window.addEventListener("resize", (event) => {
         if (window.innerWidth <= 796 && document.getElementById("sidebar").classList.contains("sideBarChange")) {
             document.getElementById("main").classList.add("mainHidden");
